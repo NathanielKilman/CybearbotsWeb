@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Check, MessageSquare, Instagram, Github, Youtube, Plus, Trash2, ExternalLink } from 'lucide-react'
+import { Mail, MapPin, Check, MessageSquare, Plus, Trash2, ExternalLink } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import { supabase } from '../lib/supabase'
@@ -196,46 +196,3 @@ export default function Contact() {
               <div>
                 <label className="label-mono block mb-1 text-xs">Subject / Purpose</label>
                 <input
-                  type="text"
-                  className="w-full bg-transparent border rounded-lg p-3 outline-none text-sm transition-colors focus:border-[var(--accent)]"
-                  style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
-                  value={form.subject}
-                  onChange={(e) => setForm(f => ({ ...f, subject: e.target.value }))}
-                  placeholder="e.g. Robot Demonstration Request"
-                />
-              </div>
-
-              <div>
-                <label className="label-mono block mb-1 text-xs">Detailed Message *</label>
-                <textarea
-                  rows={6}
-                  required
-                  className="w-full bg-transparent border rounded-lg p-3 outline-none text-sm transition-colors focus:border-[var(--accent)]"
-                  style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
-                  value={form.message}
-                  onChange={(e) => setForm(f => ({ ...f, message: e.target.value }))}
-                  placeholder="Type your communication transmission here..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={status === 'sending'}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-semibold text-white text-sm shadow transition-opacity disabled:opacity-60"
-                style={{ background: 'var(--accent-strong)' }}
-              >
-                {status === 'sending' ? 'Transmitting Data...' : 'Send Message'}
-              </button>
-
-              {status === 'error' && (
-                <p className="text-xs text-center font-bold" style={{ color: '#ed1c24' }}>
-                  Failed to send message. Check database connection parameters or retry.
-                </p>
-              )}
-            </form>
-          )}
-        </div>
-      </section>
-    </div>
-  )
-}
