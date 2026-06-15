@@ -159,10 +159,12 @@ export default function Home() {
               className="px-6 py-3 rounded-lg font-semibold bg-white text-[var(--accent-strong)] flex items-center gap-2 transition-transform hover:scale-105"
             >
               Become a Sponsor <ArrowRight size={16} />
-            </Link>
-            <Link
-              to="/contact"
-              className="px-6 py-3 rounded-lg font-semibold text-white border border-white/40 transition-transform hover:scale-105"
+           <Link
+  to="/sponsors"
+  className="px-6 py-3 rounded-lg font-semibold text-white border border-white/30 hover:bg-white/10 flex items-center gap-2 transition-transform hover:scale-105"
+>
+  Become a Sponsor <ArrowRight size={16} />
+</Link>
             >
               Get in Touch
             </Link>
