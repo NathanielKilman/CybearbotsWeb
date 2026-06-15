@@ -36,9 +36,8 @@ export default function OurStory() {
 
   const foundingBody =
     content.our_story_founding_body ||
-    `In September 2018, a group of five passionate students founded CyBearBots — the first robotics team in Brewster High School's history. What began as an idea became a program that would change the way Brewster students experience STEM.
-
-The name combines the school mascot (the Bear) with the technical heart of what we do: cyber. Our team number, 7504, is our identity in the global FIRST Robotics Competition arena.`
+    `Our team was founded in September of 2018. None of us knew about FIRST, and with our limited background in robotics, it was a bit of a struggle. This team was the first of its kind at our school. It allowed for different opportunities in engineering, publicity, finance, and competition. People from all different backgrounds came together and built a working robot and competed. This would not have been possible without our mentors, volunteers, members, and sponsors who have helped us along the way. Since then, as a team, we have grown to learn leadership and teamwork. Without the help of our crucial founding members, Brenden Fox, Edward Kaufman, Anthony Ayala, Akshay Gupta, and Lauren Knorr, we wouldn't have known where to begin. They paved the way for the following years to continue robotics and improve the team and ourselves.
+`
 
   const whatWeDoBody =
     content.our_story_what_we_do_body ||
