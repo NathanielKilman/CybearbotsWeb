@@ -1,20 +1,45 @@
 import { useState } from 'react'
-import { Newspaper, Plus, Trash2, X, Check } from 'lucide-react'
+import { Newspaper, Plus, Trash2, X, Check, Paperclip } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import ImageUpload from '../components/ImageUpload'
 import EditableText from '../components/EditableText'
 import { useTable } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
-import { supabase } from '../lib/supabase'
+import { supabase, uploadImage } from '../lib/supabase'
 
 function AddPostModal({ onClose, onSaved }) {
-  const [form, setForm] = useState({ title: '', body: '', post_date: new Date().toISOString().slice(0, 10) })
+  const [form, setForm] = useState({
+    title: '',
+    body: '',
+    post_date: new Date().toISOString().slice(0, 10),
+    image_url: '',
+  })
+  const [attachment, setAttachment] = useState(null) // { name, url }
+  const [uploadingFile, setUploadingFile] = useState(false)
   const [saving, setSaving] = useState(false)
+
+  const handleFileAttach = async (file) => {
+    if (!file) return
+    setUploadingFile(true)
+    try {
+      const url = await uploadImage(file, 'news-attachments')
+      setAttachment({ name: file.name, url })
+    } catch (err) {
+      console.error('Attachment upload failed', err)
+      alert('File upload failed. Please try again.')
+    } finally {
+      setUploadingFile(false)
+    }
+  }
 
   const save = async () => {
     if (!form.title.trim() || !form.body.trim()) return
     setSaving(true)
-    await supabase.from('news_posts').insert(form)
+    let body = form.body
+    if (attachment) {
+      body += `\n\nAttachment: ${attachment.name}\n${attachment.url}`
+    }
+    await supabase.from('news_posts').insert({ ...form, body })
     setSaving(false)
     onSaved()
     onClose()
@@ -28,6 +53,16 @@ function AddPostModal({ onClose, onSaved }) {
           <button onClick={onClose}><X size={18} /></button>
         </div>
         <div className="space-y-4">
+          <div>
+            <label className="label-mono block mb-1">Cover Photo (optional)</label>
+            <ImageUpload
+              src={form.image_url}
+              onUpload={(url) => setForm((f) => ({ ...f, image_url: url }))}
+              label="UPLOAD COVER PHOTO"
+              folder="news"
+              aspect="aspect-[16/9]"
+            />
+          </div>
           <div>
             <label className="label-mono block mb-1">Title *</label>
             <input
@@ -56,6 +91,37 @@ function AddPostModal({ onClose, onSaved }) {
               value={form.body}
               onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
             />
+          </div>
+          <div>
+            <label className="label-mono block mb-1">Attach a File (optional)</label>
+            {attachment ? (
+              <div className="flex items-center justify-between gap-2 p-2.5 rounded-lg border" style={{ borderColor: 'var(--border)' }}>
+                <span className="flex items-center gap-2 text-sm truncate">
+                  <Paperclip size={14} className="shrink-0" style={{ color: 'var(--accent)' }} />
+                  <span className="truncate">{attachment.name}</span>
+                </span>
+                <button onClick={() => setAttachment(null)} style={{ color: '#ed1c24' }}>
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <label
+                className="flex items-center justify-center gap-2 p-2.5 rounded-lg border cursor-pointer label-mono"
+                style={{ borderColor: 'var(--border-strong)', borderStyle: 'dashed' }}
+              >
+                <Paperclip size={14} />
+                {uploadingFile ? 'Uploading...' : 'CHOOSE FILE'}
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => handleFileAttach(e.target.files?.[0])}
+                  disabled={uploadingFile}
+                />
+              </label>
+            )}
+            <p className="text-xs text-[var(--text-faint)] mt-1">
+              A link to the file will be added to the end of the post body.
+            </p>
           </div>
           <button
             onClick={save}
