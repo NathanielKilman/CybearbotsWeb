@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Check, MessageSquare, Instagram, Github, Youtube, Plus, Trash2, ExternalLink } from 'lucide-react'
+import { Mail, MapPin, Send, Check, MessageSquare, Plus, Trash2, ExternalLink } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import { supabase } from '../lib/supabase'
@@ -12,7 +12,6 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [status, setStatus] = useState('idle')
 
-  // Fetch dynamic links from the team_resources database table
   const { data: dbResources, refetch } = useTable('team_resources')
   const resources = Array.isArray(dbResources) ? dbResources : []
 
@@ -26,7 +25,7 @@ export default function Contact() {
   }
 
   const handleDeleteLink = async (e, id) => {
-    e.preventDefault() // Stop link click trigger
+    e.preventDefault()
     if (!confirm("Are you sure you want to remove this link?")) return
     await supabase.from('team_resources').delete().eq('id', id)
     refetch()
@@ -60,7 +59,6 @@ export default function Contact() {
             <div className="flex items-center justify-between mt-2">
               <h2 className="font-display font-extrabold text-3xl tracking-tight">Team Channels</h2>
               
-              {/* DYNAMIC PLUS ACCORDION CONTROLLER */}
               {isUnlocked && (
                 <button
                   onClick={handleAddLink}
@@ -95,4 +93,24 @@ export default function Contact() {
               </div>
               <div>
                 <p className="label-mono text-[var(--text-faint)] text-[10px] uppercase font-bold tracking-wider">Lab Location</p>
-                <p className="text-
+                <p className="text-sm font-semibold text-[var(--text)] leading-relaxed">
+                  Brewster High School — Room 104<br />
+                  50 Foggintown Rd, Brewster, NY 10509
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* LINKS SECTION */}
+          <div className="space-y-4 pt-4 border-t border-[var(--border)]">
+            <h3 className="label-mono text-xs font-bold text-[var(--text-muted)] tracking-wider uppercase">
+              Documents & Social Media
+            </h3>
+            <div className="grid grid-cols-1 gap-3">
+              {resources.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="card p-4 flex
