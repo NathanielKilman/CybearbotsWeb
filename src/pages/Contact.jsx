@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, MapPin, MessageSquare, Plus, Trash2, ExternalLink, Check } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Check, MessageSquare, Instagram, Github, Youtube, Plus, Trash2, ExternalLink } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import { supabase } from '../lib/supabase'
@@ -12,11 +12,20 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [status, setStatus] = useState('idle')
 
+  // Fetch dynamic links from database table
   const { data: dbResources, refetch } = useTable('team_resources')
-  const resources = Array.isArray(dbResources) ? dbResources : []
+  
+  // Hardcoded default fallback links so Blue Alliance and FIRST are never missing!
+  const defaultLinks = [
+    { id: 'tba', label: 'The Blue Alliance', url: 'https://www.thebluealliance.com/team/7504', isDefault: true },
+    { id: 'first', label: 'FIRST Robotics Page', url: 'https://www.firstinspires.org/', isDefault: true }
+  ]
+
+  // Combine defaults with database resources safely
+  const resources = Array.isArray(dbResources) ? [...defaultLinks, ...dbResources] : defaultLinks
 
   const handleAddLink = async () => {
-    const label = prompt("Enter a label for this link:")
+    const label = prompt("Enter a name/label for this link:")
     const url = prompt("Enter the destination URL:")
     if (!label || !url) return
 
@@ -25,7 +34,7 @@ export default function Contact() {
   }
 
   const handleDeleteLink = async (e, id) => {
-    e.preventDefault()
+    e.preventDefault() // Stop link from opening
     if (!confirm("Are you sure you want to remove this link?")) return
     await supabase.from('team_resources').delete().eq('id', id)
     refetch()
@@ -52,12 +61,13 @@ export default function Contact() {
 
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
         
-        {/* LEFT COLUMN: CONTACT DETAILS & RESOURCE LINKS */}
+        {/* LEFT COLUMN: DIRECT CONTACT Channels */}
         <div className="lg:col-span-5 space-y-10">
           <div>
             <SectionLabel>CONNECT WITH US</SectionLabel>
             <div className="flex items-center justify-between mt-2">
               <h2 className="font-display font-extrabold text-3xl tracking-tight">Team Channels</h2>
+              
               {isUnlocked && (
                 <button
                   onClick={handleAddLink}
@@ -72,7 +82,7 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Core Address & Email Info Cards */}
+          {/* Core Contact Info Layout Blocks */}
           <div className="space-y-4">
             <div className="card p-4 flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-[var(--bg-elevated)] flex items-center justify-center text-[var(--accent)] border border-[var(--border)] shrink-0">
@@ -100,7 +110,7 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Dynamic Link List Segment */}
+          {/* Dynamic & Fallback Public Resource Directory Links */}
           <div className="space-y-4 pt-4 border-t border-[var(--border)]">
             <h3 className="label-mono text-xs font-bold text-[var(--text-muted)] tracking-wider uppercase">
               Documents & Social Media
@@ -123,7 +133,9 @@ export default function Contact() {
                       {item.label}
                     </h4>
                   </div>
-                  {isUnlocked && (
+
+                  {/* Show delete button only for custom admin links, not default placeholders */}
+                  {isUnlocked && !item.isDefault && (
                     <button
                       onClick={(e) => handleDeleteLink(e, item.id)}
                       className="p-2 rounded-lg text-[var(--text-faint)] hover:text-[#ed1c24] hover:bg-[var(--bg-elevated)] transition-colors"
@@ -137,7 +149,7 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: INTERACTIVE FORM TERMINAL */}
+        {/* RIGHT COLUMN: MESSAGING FORM PANEL */}
         <div className="lg:col-span-7">
           {status === 'sent' ? (
             <div className="card p-10 text-center space-y-4 max-w-xl mx-auto border-2 border-[var(--accent)]">
