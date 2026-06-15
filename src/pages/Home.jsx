@@ -15,7 +15,7 @@ export default function Home() {
   const { content, setValue } = useSiteContent()
   const { images, setImage } = useSiteImages()
   
-  // Fetch news logs safely
+  // Safely fetch latest news items
   const { data: newsData } = useTable('news_posts', { order: 'post_date', ascending: false })
   const news = Array.isArray(newsData) ? newsData : []
 
@@ -25,9 +25,9 @@ export default function Home() {
 
   return (
     <div>
-      {/* HERO */}
+      {/* HERO SECTION */}
       <section className="relative overflow-hidden border-b hex-pattern" style={{ borderColor: 'var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 pt-12 pb-16 lg:pt-20 lg:pb-24">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6 pt-12 pb-16 lg:pt-20 lg:pb-28">
           
           {/* BRANDING LOGO ROW */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8 mb-8">
@@ -51,7 +51,7 @@ export default function Home() {
             FRC TEAM #7504 · BREWSTER, NY
           </p>
           
-          {/* FIXED: Keeps uppercase font weights, and tracking leading rules so 'Y' doesn't crash down */}
+          {/* FIXED: Added leading-tight and adjusted margins so the "Y" doesn't overlap text below */}
           <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-tight mb-6">
             CYBEARBOTS <span style={{ color: 'var(--accent)' }}>#7504</span>
           </h1>
@@ -68,7 +68,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* QUICK LINKS */}
+      {/* QUICK LINKS SECTION */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {QUICK_LINKS.map((link) => {
@@ -89,12 +89,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* LATEST NEWS PREVIEW */}
+      {/* LATEST NEWS SECTION */}
       {news.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-b" style={{ borderColor: 'var(--border)' }}>
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-display font-bold text-2xl tracking-tight">Latest News</h2>
-            <Link to="/news" className="text-sm font-semibold flex items-center gap-1 hover:underline animate-fade-in" style={{ color: 'var(--accent)' }}>
+            <Link to="/news" className="text-sm font-semibold flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
               All Posts <ArrowRight size={14} />
             </Link>
           </div>
@@ -117,7 +117,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* MULTI-PHOTO GALLERY AND TAGLINE */}
+      {/* PHOTO GALLERY SECTION */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 border-b" style={{ borderColor: 'var(--border)' }}>
         <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl leading-none tracking-tight mb-12">
           Engineering Tomorrow,<br />
@@ -168,7 +168,8 @@ export default function Home() {
             contribution directly funds our season, travel, and student development.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            {/* SOLID WHITE BUTTON WITH GREEN TEXT (HIGH CONTRAST INTERACTION) */}
+            
+            {/* FIXED: Button background is white, and text color is locked to your dark green variable */}
             <Link
               to="/sponsors"
               className="px-6 py-3 rounded-lg font-semibold bg-white flex items-center gap-2 transition-transform hover:scale-105 shadow-md"
@@ -177,7 +178,6 @@ export default function Home() {
               Become a Sponsor <ArrowRight size={16} />
             </Link>
             
-            {/* OUTLINED TRANSPARENT BUTTON */}
             <Link
               to="/contact"
               className="px-6 py-3 rounded-lg font-semibold text-white border border-white/30 hover:bg-white/10 flex items-center gap-2 transition-transform hover:scale-105"
