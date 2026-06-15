@@ -45,7 +45,7 @@ export default function Home() {
           <p className="label-mono mb-4 fade-up fade-up-1" style={{ color: 'var(--accent)' }}>
             FRC TEAM #7504 · BREWSTER, NY
           </p>
-          <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-8xl leading-[0.95] mb-8 fade-up fade-up-2">
+          <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-tight mb-6">
             CyBearBots
           </h1>
           <div className="max-w-3xl fade-up fade-up-3">
