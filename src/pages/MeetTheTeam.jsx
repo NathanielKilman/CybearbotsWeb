@@ -15,6 +15,11 @@ const CATEGORIES = [
 const SUBTEAMS = ['Mechanical', 'Coding', 'Business', 'Driving', 'Analytics', 'Other']
 
 function MemberCard({ member, onEdit, onDelete, isUnlocked }) {
+  // If subteam is an array, join with commas; otherwise fallback to string or empty
+  const subteamDisplay = Array.isArray(member.subteam) 
+    ? member.subteam.join(', ') 
+    : member.subteam;
+
   return (
     <div className="card p-5 text-center relative group">
       {isUnlocked && (
@@ -45,9 +50,9 @@ function MemberCard({ member, onEdit, onDelete, isUnlocked }) {
         )}
       </div>
       <h3 className="font-display font-bold text-lg">{member.name}</h3>
-      {member.subteam && (
-        <p className="label-mono mt-1" style={{ color: 'var(--accent)' }}>
-          {member.subteam}
+      {subteamDisplay && (
+        <p className="label-mono mt-1 text-sm" style={{ color: 'var(--accent)' }}>
+          {subteamDisplay}
         </p>
       )}
       {member.role && <p className="text-sm text-[var(--text-muted)] mt-1">{member.role}</p>}
@@ -57,12 +62,30 @@ function MemberCard({ member, onEdit, onDelete, isUnlocked }) {
 }
 
 function MemberFormModal({ initial, category, onClose, onSaved }) {
-  const [form, setForm] = useState(
-    initial || { name: '', role: '', subteam: '', bio: '', photo_url: '', category }
-  )
+  // Ensure subteam initializes as an array
+  const [form, setForm] = useState(() => {
+    if (initial) {
+      return {
+        ...initial,
+        subteam: Array.isArray(initial.subteam) ? initial.subteam : (initial.subteam ? [initial.subteam] : [])
+      }
+    }
+    return { name: '', role: '', subteam: [], bio: '', photo_url: '', category }
+  })
+  
   const [saving, setSaving] = useState(false)
 
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }))
+
+  // Handle checking and unchecking subteam boxes
+  const handleSubteamChange = (subteamName) => {
+    const currentSubteams = form.subteam || []
+    if (currentSubteams.includes(subteamName)) {
+      update('subteam', currentSubteams.filter(s => s !== subteamName))
+    } else {
+      update('subteam', [...currentSubteams, subteamName])
+    }
+  }
 
   const save = async () => {
     if (!form.name.trim()) return
@@ -113,22 +136,29 @@ function MemberFormModal({ initial, category, onClose, onSaved }) {
               onChange={(e) => update('role', e.target.value)}
             />
           </div>
+          
           {category === 'student' && (
             <div>
-              <label className="label-mono block mb-1">Subteam</label>
-              <select
-                className="w-full bg-transparent border rounded-lg p-2 outline-none"
-                style={{ borderColor: 'var(--border)' }}
-                value={form.subteam || ''}
-                onChange={(e) => update('subteam', e.target.value)}
-              >
-                <option value="">— Select —</option>
-                {SUBTEAMS.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
+              <label className="label-mono block mb-2">Subteams (Select all that apply)</label>
+              <div className="grid grid-cols-2 gap-2 p-2 border rounded-lg" style={{ borderColor: 'var(--border)' }}>
+                {SUBTEAMS.map((s) => {
+                  const isChecked = (form.subteam || []).includes(s);
+                  return (
+                    <label key={s} className="flex items-center gap-2 text-sm cursor-pointer py-1">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleSubteamChange(s)}
+                        className="rounded accent-[var(--accent-strong)]"
+                      />
+                      <span>{s}</span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
           )}
+
           <div>
             <label className="label-mono block mb-1">Bio (optional)</label>
             <textarea
