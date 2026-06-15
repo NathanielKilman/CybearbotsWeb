@@ -369,4 +369,71 @@ export default function Sponsors() {
               Thank you for reaching out to support CyBearBots. A team representative or mentor will contact you shortly.
             </p>
           </div>
-        ) :
+        ) : (
+          <form onSubmit={handleInquirySubmit} className="card p-6 sm:p-8 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="label-mono block mb-1 text-xs">Your Name *</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
+                  style={{ borderColor: 'var(--border)' }}
+                  value={inquiry.name}
+                  onChange={(e) => setInquiry(f => ({ ...f, name: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="label-mono block mb-1 text-xs">Company / Organization</label>
+                <input
+                  type="text"
+                  className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
+                  style={{ borderColor: 'var(--border)' }}
+                  value={inquiry.company}
+                  onChange={(e) => setInquiry(f => ({ ...f, company: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div>
+              <label className="label-mono block mb-1 text-xs">Email Address *</label>
+              <input
+                type="email"
+                required
+                className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
+                style={{ borderColor: 'var(--border)' }}
+                value={inquiry.email}
+                onChange={(e) => setInquiry(f => ({ ...f, email: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label-mono block mb-1 text-xs">Message / Comments</label>
+              <textarea
+                rows={5}
+                className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
+                style={{ borderColor: 'var(--border)' }}
+                value={inquiry.message}
+                onChange={(e) => setInquiry(f => ({ ...f, message: e.target.value }))}
+                placeholder="Let us know how you would like to partner with our team..."
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={formStatus === 'sending'}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm transition-opacity disabled:opacity-50"
+              style={{ background: 'var(--accent-strong)' }}
+            >
+              <Send size={15} /> {formStatus === 'sending' ? 'Sending Inquiry...' : 'Submit Inquiry'}
+            </button>
+            {formStatus === 'error' && (
+              <p className="text-xs text-center font-semibold" style={{ color: '#ed1c24' }}>
+                Failed to send message. Please try again or reach out to us via email.
+              </p>
+            )}
+          </form>
+        )}
+      </section>
+
+      {showAdd && <AddSponsorModal onClose={() => setShowAdd(false)} onSaved={refetch} />}
+    </div>
+  )
+}
