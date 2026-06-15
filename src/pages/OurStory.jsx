@@ -16,7 +16,7 @@ const VALUES = [
   {
     icon: Star,
     title: 'Gracious Professionalism',
-    body: 'A core FIRST value — we compete fiercely and assist our fellow teams with equal enthusiasm. Excellence and integrity are not opposites.',
+    body: 'A core FIRST value, we compete fiercely and assist our fellow teams with equal enthusiasm. Excellence and integrity are not opposites.',
   },
   {
     icon: Heart,
@@ -26,7 +26,7 @@ const VALUES = [
   {
     icon: Wrench,
     title: 'Hands-On STEM',
-    body: 'Real engineering, real code, real business decisions — every member learns by doing, not by watching.',
+    body: 'Real engineering, real code, real business decisions; every member learns by doing, not by watching.',
   },
 ]
 
@@ -36,12 +36,13 @@ export default function OurStory() {
 
   const foundingBody =
     content.our_story_founding_body ||
-    `Our team was founded in September of 2018. None of us knew about FIRST, and with our limited background in robotics, it was a bit of a struggle. This team was the first of its kind at our school. It allowed for different opportunities in engineering, publicity, finance, and competition. People from all different backgrounds came together and built a working robot and competed. This would not have been possible without our mentors, volunteers, members, and sponsors who have helped us along the way. Since then, as a team, we have grown to learn leadership and teamwork. Without the help of our crucial founding members, Brenden Fox, Edward Kaufman, Anthony Ayala, Akshay Gupta, and Lauren Knorr, we wouldn't have known where to begin. They paved the way for the following years to continue robotics and improve the team and ourselves.
+    `"Our team was founded in September of 2018. None of us knew about FIRST, and with our limited background in robotics, it was a bit of a struggle. This team was the first of its kind at our school. It allowed for different opportunities in engineering, publicity, finance, and competition. People from all different backgrounds came together and built a working robot and competed. This would not have been possible without our mentors, volunteers, members, and sponsors who have helped us along the way. Since then, as a team, we have grown to learn leadership and teamwork. Without the help of our crucial founding members, Brenden Fox, Edward Kaufman, Anthony Ayala, Akshay Gupta, and Lauren Knorr, we wouldn't have known where to begin. They paved the way for the following years to continue robotics and improve the team and ourselves." 
+    - The First Team Members
 `
 
   const whatWeDoBody =
     content.our_story_what_we_do_body ||
-    `Every fall, we begin a new season. In January, FIRST reveals the game challenge — and the clock starts. Our team has just weeks to design, build, wire, and program a robot capable of competing on the FRC field.
+    `Every fall, we begin a new season. In January, FIRST reveals the game challenge and the clock starts. Our team has just weeks to design, build, wire, and program a robot capable of competing on a FRC field.
 
 Subteams cover every discipline: Mechanical engineers design and fabricate. Coders build autonomous and teleoperated control systems. Business manages our budget, outreach, and sponsorships. Drivers master the controls. Analysts track data and strategy.
 
