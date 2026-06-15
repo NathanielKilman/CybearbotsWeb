@@ -1,12 +1,14 @@
 import { useRef, useState } from 'react'
 import { Upload, Image as ImageIcon, Pencil } from 'lucide-react'
 import { uploadImage } from '../lib/supabase'
+import { useTeamAuth } from '../context/TeamAuthContext'
 
 /**
  * An editable image slot.
- * - If `src` is set, shows the image. In edit mode (always-on for this
- *   site), hovering shows a "replace" overlay.
- * - If `src` is empty, shows an upload placeholder with the given label.
+ * - If `src` is set, shows the image. Team members (unlocked) see a
+ *   "replace" overlay on hover; everyone else just sees the image.
+ * - If `src` is empty: team members see an upload placeholder; everyone
+ *   else sees nothing (the slot collapses).
  *
  * @param {string} src - current image URL (or falsy)
  * @param {(url: string) => void} onUpload - called with new public URL
@@ -24,12 +26,15 @@ export default function ImageUpload({
   aspect = 'aspect-[4/3]',
   rounded = 'rounded-xl',
 }) {
+  const { isUnlocked } = useTeamAuth()
   const inputRef = useRef(null)
   const [uploading, setUploading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
 
+  const canEdit = isUnlocked && !!onUpload
+
   const handleFile = async (file) => {
-    if (!file || !onUpload) return
+    if (!file || !canEdit) return
     setUploading(true)
     try {
       const url = await uploadImage(file, folder)
@@ -55,7 +60,7 @@ export default function ImageUpload({
         className={`relative group overflow-hidden ${aspect} ${rounded} ${className}`}
       >
         <img src={src} alt={label} className="w-full h-full object-cover" />
-        {onUpload && (
+        {canEdit && (
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
@@ -66,15 +71,24 @@ export default function ImageUpload({
             </span>
           </button>
         )}
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => handleFile(e.target.files?.[0])}
-        />
+        {canEdit && (
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => handleFile(e.target.files?.[0])}
+          />
+        )}
       </div>
     )
+  }
+
+  // No image set
+  if (!canEdit) {
+    // Public visitors: don't show an upload prompt for an empty slot.
+    // Render nothing so the layout doesn't show placeholder boxes to the public.
+    return null
   }
 
   return (
