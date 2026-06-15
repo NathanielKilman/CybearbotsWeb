@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Sun, Moon, Menu, X, Zap } from 'lucide-react'
+import { Sun, Moon, Menu, X, Zap, Lock, Unlock } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
+import { useTeamAuth } from '../context/TeamAuthContext'
 import { useSiteImages } from '../lib/data'
 
 const NAV_LINKS = [
@@ -20,6 +21,7 @@ const NAV_LINKS = [
 export default function Navbar({ robotGalleryVisible = true }) {
   const { theme, toggleTheme } = useTheme()
   const { images } = useSiteImages()
+  const { isUnlocked } = useTeamAuth()
   const [open, setOpen] = useState(false)
 
   const links = robotGalleryVisible
@@ -68,6 +70,21 @@ export default function Navbar({ robotGalleryVisible = true }) {
                 {link.label.toUpperCase()}
               </NavLink>
             ))}
+            <NavLink
+              to="/team-access"
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-3 py-2 rounded-lg label-mono text-[11px] transition-colors whitespace-nowrap border ${
+                  isActive
+                    ? 'text-[var(--accent)] bg-[var(--accent-soft)] border-[var(--accent)]'
+                    : isUnlocked
+                    ? 'text-[var(--accent)] border-[var(--accent)]'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)] border-transparent'
+                }`
+              }
+            >
+              {isUnlocked ? <Unlock size={12} /> : <Lock size={12} />}
+              TEAM ACCESS
+            </NavLink>
           </nav>
 
           {/* Theme toggle + mobile menu button */}
@@ -110,6 +127,22 @@ export default function Navbar({ robotGalleryVisible = true }) {
                 {link.label.toUpperCase()}
               </NavLink>
             ))}
+            <NavLink
+              to="/team-access"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2.5 rounded-lg label-mono text-[11px] transition-colors border ${
+                  isActive
+                    ? 'text-[var(--accent)] bg-[var(--accent-soft)] border-[var(--accent)]'
+                    : isUnlocked
+                    ? 'text-[var(--accent)] border-[var(--accent)]'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)] border-transparent'
+                }`
+              }
+            >
+              {isUnlocked ? <Unlock size={12} /> : <Lock size={12} />}
+              TEAM ACCESS
+            </NavLink>
           </nav>
         )}
       </div>
