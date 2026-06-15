@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, MapPin, Send, Check, MessageSquare, Plus, Trash2, ExternalLink } from 'lucide-react'
+import { Mail, MapPin, MessageSquare, Plus, Trash2, ExternalLink, Check } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import { supabase } from '../lib/supabase'
@@ -51,6 +51,8 @@ export default function Contact() {
       <PageHero kicker="GET IN TOUCH" title="Contact Us" variant="green" />
 
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        
+        {/* LEFT COLUMN: CONTACT DETAILS & RESOURCE LINKS */}
         <div className="lg:col-span-5 space-y-10">
           <div>
             <SectionLabel>CONNECT WITH US</SectionLabel>
@@ -70,6 +72,7 @@ export default function Contact() {
             </p>
           </div>
 
+          {/* Core Address & Email Info Cards */}
           <div className="space-y-4">
             <div className="card p-4 flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-[var(--bg-elevated)] flex items-center justify-center text-[var(--accent)] border border-[var(--border)] shrink-0">
@@ -97,6 +100,7 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* Dynamic Link List Segment */}
           <div className="space-y-4 pt-4 border-t border-[var(--border)]">
             <h3 className="label-mono text-xs font-bold text-[var(--text-muted)] tracking-wider uppercase">
               Documents & Social Media
@@ -130,3 +134,96 @@ export default function Contact() {
                 </a>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: INTERACTIVE FORM TERMINAL */}
+        <div className="lg:col-span-7">
+          {status === 'sent' ? (
+            <div className="card p-10 text-center space-y-4 max-w-xl mx-auto border-2 border-[var(--accent)]">
+              <div className="w-14 h-14 rounded-full bg-[var(--accent-soft)] flex items-center justify-center mx-auto text-[var(--accent)]">
+                <Check size={28} />
+              </div>
+              <h3 className="font-display font-bold text-2xl">Message Dispatched</h3>
+              <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+                Your transmission was uploaded successfully. One of our student leaders or coach mentors will respond shortly via email.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="card p-6 sm:p-10 space-y-5 bg-[var(--bg-elevated)] border border-[var(--border)]">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageSquare size={18} className="text-[var(--accent)]" />
+                <h3 className="font-display font-bold text-xl">Direct Message Terminal</h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="label-mono block mb-1 text-xs">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full bg-transparent border rounded-lg p-3 outline-none text-sm transition-colors focus:border-[var(--accent)]"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
+                    value={form.name}
+                    onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="label-mono block mb-1 text-xs">Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    className="w-full bg-transparent border rounded-lg p-3 outline-none text-sm transition-colors focus:border-[var(--accent)]"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
+                    value={form.email}
+                    onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="label-mono block mb-1 text-xs">Subject / Purpose</label>
+                <input
+                  type="text"
+                  className="w-full bg-transparent border rounded-lg p-3 outline-none text-sm transition-colors focus:border-[var(--accent)]"
+                  style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
+                  value={form.subject}
+                  onChange={(e) => setForm(f => ({ ...f, subject: e.target.value }))}
+                  placeholder="e.g. Robot Demonstration Request"
+                />
+              </div>
+
+              <div>
+                <label className="label-mono block mb-1 text-xs">Detailed Message *</label>
+                <textarea
+                  rows={6}
+                  required
+                  className="w-full bg-transparent border rounded-lg p-3 outline-none text-sm transition-colors focus:border-[var(--accent)]"
+                  style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
+                  value={form.message}
+                  onChange={(e) => setForm(f => ({ ...f, message: e.target.value }))}
+                  placeholder="Type your communication transmission here..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-semibold text-white text-sm shadow transition-opacity disabled:opacity-60"
+                style={{ background: 'var(--accent-strong)' }}
+              >
+                {status === 'sending' ? 'Transmitting Data...' : 'Send Message'}
+              </button>
+
+              {status === 'error' && (
+                <p className="text-xs text-center font-bold" style={{ color: '#ed1c24' }}>
+                  Failed to send message. Check database connection parameters or retry.
+                </p>
+              )}
+            </form>
+          )}
+        </div>
+      </section>
+    </div>
+  )
+}
