@@ -15,7 +15,10 @@ export default function PageHero({ kicker, title, corner, variant = 'default' })
       ? 'var(--color-first-blue)'
       : 'var(--bg-elevated)'
 
-  const textColor = variant === 'default' ? 'var(--text)' : '#ffffff'
+  const isSolidColored = variant === 'green' || variant === 'blue'
+const textColor = isSolidColored ? '#ffffff' : 'var(--text)'
+const mutedTextColor = isSolidColored ? 'rgba(255, 255, 255, 0.8)' : 'var(--text-muted)'
+const faintTextColor = isSolidColored ? 'rgba(255, 255, 255, 0.6)' : 'var(--text-faint)'
 
   return (
     <section
