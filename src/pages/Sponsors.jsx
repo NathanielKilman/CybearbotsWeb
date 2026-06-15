@@ -161,7 +161,6 @@ function AddSponsorModal({ onClose, onSaved }) {
 }
 
 function SponsorCard({ sponsor, isUnlocked, onDelete }) {
-  // Use the isolated formatter rule logic for links
   const targetLink = formatExternalUrl(sponsor.website_url)
 
   return (
@@ -182,7 +181,6 @@ function SponsorCard({ sponsor, isUnlocked, onDelete }) {
         rel="noreferrer"
         className="flex flex-col items-center justify-center gap-4 w-full h-full transition-opacity hover:opacity-90"
       >
-        {/* LOGO AREA CONTAINER */}
         {sponsor.logo_url ? (
           <img
             src={sponsor.logo_url}
@@ -195,7 +193,6 @@ function SponsorCard({ sponsor, isUnlocked, onDelete }) {
           </div>
         )}
 
-        {/* FIXED: Sponsor descriptive text block is now placed down here, rendering consistently under logos */}
         <div>
           <h4 className="font-display font-bold text-base text-[var(--text)] tracking-tight">{sponsor.name}</h4>
           {sponsor.description && (
@@ -212,10 +209,12 @@ function SponsorCard({ sponsor, isUnlocked, onDelete }) {
 export default function Sponsors() {
   const { isUnlocked } = useTeamAuth()
   const { content } = useSiteContent()
-  const { data: sponsors, refetch } = useTable('sponsors')
+  const { data: sponsorsData, refetch } = useTable('sponsors')
   const [showAdd, setShowAdd] = useState(false)
   const [formStatus, setFormStatus] = useState('idle')
   const [inquiry, setInquiry] = useState({ name: '', company: '', email: '', message: '' })
+
+  const sponsors = Array.isArray(sponsorsData) ? sponsorsData : []
 
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to remove this sponsor?')) return
@@ -284,7 +283,7 @@ export default function Sponsors() {
                     <SponsorCard key={s.id} sponsor={s} isUnlocked={isUnlocked} onDelete={handleDelete} />
                   ))}
                 </div>
-              );
+              )}
             </div>
           )
         })}
@@ -320,4 +319,54 @@ export default function Sponsors() {
             <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 2 · EQUIPMENT</p>
             <h3 className="font-display font-bold text-xl mb-3">Material Donations</h3>
             <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">
-              We highly welcome industrial materials, machining tools, safety inventory, or electronics
+              We highly welcome industrial materials, machining tools, safety inventory, or electronics components.
+            </p>
+            <a
+              href="/contact"
+              className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold border text-sm transition-all hover:bg-[var(--bg-elevated)]"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              Coordinate Material Gift
+            </a>
+          </div>
+
+          <div className="card p-6 flex flex-col">
+            <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 3 · FIRST DIRECT</p>
+            <h3 className="font-display font-bold text-xl mb-3">Via FIRST HQ</h3>
+            <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">Donations can be processed through FIRST directly mapped to our account identity:</p>
+            <div className="rounded-xl p-4 font-mono text-xs mb-4 bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+              FIRST Robotics HQ<br />
+              PO Box 845446<br />
+              Boston, MA 02284-5446
+            </div>
+            <a
+              href={paymentFormUrl || 'https://www.firstinspires.org'}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm"
+              style={{ background: 'var(--accent-strong)' }}
+            >
+              Online Payment Form <ExternalLink size={14} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* INQUIRY FORM SECTION */}
+      <section className="max-w-3xl mx-auto px-4 lg:px-6 py-16 border-t" style={{ borderColor: 'var(--border)' }}>
+        <div className="text-center mb-10">
+          <SectionLabel center>BECOME A PARTNER</SectionLabel>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl mt-3 tracking-tight">Sponsor Inquiry</h2>
+        </div>
+        
+        {formStatus === 'sent' ? (
+          <div className="card p-8 text-center max-w-md mx-auto space-y-3">
+            <div className="w-12 h-12 rounded-full bg-[var(--accent-soft)] flex items-center justify-center mx-auto text-[var(--accent)]">
+              <Check size={24} />
+            </div>
+            <h3 className="font-display font-bold text-xl">Inquiry Received!</h3>
+            <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+              Thank you for reaching out to support CyBearBots. A team representative or mentor will contact you shortly.
+            </p>
+          </div>
+        ) :
