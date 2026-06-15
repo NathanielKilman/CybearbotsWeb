@@ -76,19 +76,19 @@ export default function WhatIsFirst() {
             </h2>
             <div className="text-[var(--text-muted)] leading-relaxed space-y-4">
               <p>
-                FIRST (For Inspiration and Recognition of Science and Technology) is a nonprofit
-                organization founded in 1989 by inventor and entrepreneur Dean Kamen. Its mission:
-                to inspire young people to be science and technology leaders and innovators, by
-                engaging them in exciting mentor-based programs.
+               FIRST (For Inspiration and Recognition of Science and Technology) is a nonprofit organization
+                founded in 1989 by inventor and entrepreneur Dean Kamen. Its mission is to inspire young people to
+                be science and technology leaders and innovators, by engaging them in exciting mentor-based
+                programs.
               </p>
               <p>
-                Unlike a typical science fair or classroom project, FIRST programs are structured
-                like real engineering challenges — with deadlines, budgets, sponsors, and live
-                competition. Students don't just learn about STEM; they practice it.
+                Unlike a typical science fair or classroom project, FIRST programs are structured like real engineering
+                challenges, complete with deadlines, budgets, sponsors, and live competition. Students don't just
+                learn about STEM; they practice it.
               </p>
               <p>
-                Today, FIRST operates in 110+ countries, reaching over 680,000 students with
-                programs spanning kindergarten through 12th grade.
+                Today, FIRST operates in more than 110 countries, reaching over 680,000 students with programs
+                spanning kindergarten through 12th grade.
               </p>
               <a
                 href="https://www.firstinspires.org"
