@@ -51,14 +51,11 @@ export default function Contact() {
       <PageHero kicker="GET IN TOUCH" title="Contact Us" variant="green" />
 
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        
-        {/* LEFT COLUMN: DIRECT CONTACT & SOCIAL DIRECTORY */}
         <div className="lg:col-span-5 space-y-10">
           <div>
             <SectionLabel>CONNECT WITH US</SectionLabel>
             <div className="flex items-center justify-between mt-2">
               <h2 className="font-display font-extrabold text-3xl tracking-tight">Team Channels</h2>
-              
               {isUnlocked && (
                 <button
                   onClick={handleAddLink}
@@ -73,7 +70,6 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Core Info Boxes */}
           <div className="space-y-4">
             <div className="card p-4 flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-[var(--bg-elevated)] flex items-center justify-center text-[var(--accent)] border border-[var(--border)] shrink-0">
@@ -101,7 +97,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* LINKS SECTION */}
           <div className="space-y-4 pt-4 border-t border-[var(--border)]">
             <h3 className="label-mono text-xs font-bold text-[var(--text-muted)] tracking-wider uppercase">
               Documents & Social Media
@@ -113,4 +108,25 @@ export default function Contact() {
                   href={item.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="card p-4 flex
+                  className="card p-4 flex items-center justify-between transition-all hover:scale-[1.01] group border"
+                  style={{ borderColor: 'var(--border)' }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border bg-[var(--bg-elevated)]" style={{ borderColor: 'var(--border)' }}>
+                      <ExternalLink size={16} className="text-[var(--accent)]" />
+                    </div>
+                    <h4 className="text-sm font-bold text-[var(--text)] group-hover:underline">
+                      {item.label}
+                    </h4>
+                  </div>
+                  {isUnlocked && (
+                    <button
+                      onClick={(e) => handleDeleteLink(e, item.id)}
+                      className="p-2 rounded-lg text-[var(--text-faint)] hover:text-[#ed1c24] hover:bg-[var(--bg-elevated)] transition-colors"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </a>
+              ))}
+            </div>
