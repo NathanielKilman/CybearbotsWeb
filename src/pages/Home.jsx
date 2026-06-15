@@ -143,11 +143,13 @@ export default function Home() {
           className="rounded-2xl p-10 lg:p-16 text-center hex-pattern"
           style={{ background: 'var(--accent-strong)' }}
         >
-          <p className="label-mono mb-3" style={{ color: 'rgba(255,255,255,0.7)' }}>
-            BREWSTER HIGH SCHOOL · SINCE 2018
-          </p>
-          <h2 className="font-display font-black text-4xl sm:text-5xl text-white mb-5">Support Our Mission</h2>
-          <p className="text-white/85 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="label-mono mb-3 text-xs font-semibold tracking-wider" style={{ color: 'rgba(255, 255, 255, 0.75)' }}>
+  BREWSTER HIGH SCHOOL · SINCE 2018
+</p>
+<h2 className="font-display font-black text-4xl sm:text-5xl text-white mb-5 tracking-tight">
+  Support Our Mission
+</h2>
+<p className="text-white/90 max-w-2xl mx-auto mb-8 leading-relaxed text-base sm:text-lg">
             CyBearBots runs on the generosity of local businesses and community members. Every
             contribution directly funds our season, travel, and student development.
           </p>
