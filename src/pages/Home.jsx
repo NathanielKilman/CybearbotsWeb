@@ -10,7 +10,7 @@ import EditableText from '../components/EditableText'
 const QUICK_LINKS = [
   { to: '/sponsors', label: 'Sponsors', icon: Heart, color: '#3ba271' },
   { to: '/competitions', label: 'Competitions', icon: Trophy, color: '#0066b3' },
-  { to: '/news', label: 'News', icon: Newspaper, color: 'var(--accent)' }, /* Removed the hardcoded red */
+  { to: '/news', label: 'News', icon: Newspaper, color: 'var(--accent)' },
   { to: '/contact', label: 'Contact', icon: Users, color: '#3ba271' },
 ]
 
@@ -24,10 +24,7 @@ export default function Home() {
   const mission =
     content.mission_statement ||
     'The mission of CyBearBots is to move past the traditional classroom to include more students, encourage community collaboration with mentors, and immerse ourselves in STEM through our involvement with FIRST.'
-console.log("Database response:", resources)
 
-  return (
-    <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-b" style={{ borderColor: 'var(--border)' }}>
   return (
     <div>
       {/* HERO SECTION */}
