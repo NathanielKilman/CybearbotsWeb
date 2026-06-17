@@ -15,10 +15,22 @@ const CATEGORIES = [
 const SUBTEAMS = ['Mechanical', 'Coding', 'Business', 'Driving', 'Analytics', 'Other']
 
 function MemberCard({ member, onEdit, onDelete, isUnlocked }) {
-  // If subteam is an array, join with commas; otherwise fallback to string or empty
-  const subteamDisplay = Array.isArray(member.subteam) 
-    ? member.subteam.join(', ') 
-    : member.subteam;
+  // Safely parse the subteam data to remove raw JSON brackets/quotes from Supabase
+  let parsedSubteams = [];
+  if (Array.isArray(member.subteam)) {
+    parsedSubteams = member.subteam;
+  } else if (typeof member.subteam === 'string' && member.subteam.trim() !== '') {
+    try {
+      parsedSubteams = JSON.parse(member.subteam);
+    } catch (e) {
+      parsedSubteams = [member.subteam];
+    }
+  }
+
+  // .join(' | ') automatically handles the spacing. 
+  // 1 item = "Coding"
+  // 2 items = "Coding | Driving"
+  const subteamDisplay = parsedSubteams.join(' | ');
 
   return (
     <div className="card p-5 text-center relative group">
@@ -62,12 +74,25 @@ function MemberCard({ member, onEdit, onDelete, isUnlocked }) {
 }
 
 function MemberFormModal({ initial, category, onClose, onSaved }) {
-  // Ensure subteam initializes as an array
+  // Ensure subteam initializes as an array, cleaning up Supabase formatting if needed
   const [form, setForm] = useState(() => {
+    let initialSubteams = [];
+    if (initial && initial.subteam) {
+      if (Array.isArray(initial.subteam)) {
+        initialSubteams = initial.subteam;
+      } else if (typeof initial.subteam === 'string') {
+        try {
+          initialSubteams = JSON.parse(initial.subteam);
+        } catch (e) {
+          initialSubteams = [initial.subteam];
+        }
+      }
+    }
+
     if (initial) {
       return {
         ...initial,
-        subteam: Array.isArray(initial.subteam) ? initial.subteam : (initial.subteam ? [initial.subteam] : [])
+        subteam: initialSubteams
       }
     }
     return { name: '', role: '', subteam: [], bio: '', photo_url: '', category }
@@ -77,12 +102,14 @@ function MemberFormModal({ initial, category, onClose, onSaved }) {
 
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }))
 
-  // Handle checking and unchecking subteam boxes
+  // Handle checking and unchecking subteam boxes (prevents duplicates)
   const handleSubteamChange = (subteamName) => {
     const currentSubteams = form.subteam || []
     if (currentSubteams.includes(subteamName)) {
+      // If it's already in the list, remove it
       update('subteam', currentSubteams.filter(s => s !== subteamName))
     } else {
+      // If it's not in the list, add it
       update('subteam', [...currentSubteams, subteamName])
     }
   }
@@ -258,4 +285,4 @@ export default function MeetTheTeam() {
       )}
     </div>
   )
-              }
+}
