@@ -24,13 +24,12 @@ export default function Navbar({ robotGalleryVisible = true }) {
   const { isUnlocked } = useTeamAuth()
   const [open, setOpen] = useState(false)
 
-  // Filter links if Robot Gallery is hidden via settings
   const links = robotGalleryVisible
     ? NAV_LINKS
     : NAV_LINKS.filter((l) => l.to !== '/robot-gallery')
 
   return (
-    <header className="sticky top-0 z-50 border-b w-full bg-[var(--nav-bg)]" style={{ borderColor: 'var(--border)' }}>
+    <header className="sticky top-0 z-50 w-full bg-[var(--nav-bg)] border-b" style={{ borderColor: 'var(--border)' }}>
       <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
         
         {/* LOGO */}
@@ -42,120 +41,74 @@ export default function Navbar({ robotGalleryVisible = true }) {
           )}
         </Link>
 
-        {/* DESKTOP NAVIGATION (Hidden on screens smaller than xl to prevent side-scrolling) */}
-        <nav className="hidden xl:flex items-center gap-1 font-mono text-xs font-bold">
+        {/* DESKTOP NAV: ALWAYS VISIBLE */}
+        <nav className="hidden lg:flex items-center gap-1 font-mono text-[11px] font-bold">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
-                `px-2.5 py-1.5 rounded-md transition-colors ${
+                `px-3 py-1.5 rounded-md transition-colors ${
                   isActive
                     ? 'text-[var(--accent)] bg-[var(--accent-soft)]'
-                    : 'text-[var(--text)] hover:text-[var(--accent)]' // High contrast update here
+                    : 'text-[var(--text)] hover:text-[var(--accent)]'
                 }`
               }
             >
               {link.label.toUpperCase()}
             </NavLink>
           ))}
-          
-          {/* Desktop Theme Toggle */}
-          <button 
-            onClick={toggleTheme} 
-            className="p-2 ml-2 rounded-lg text-[var(--text)] hover:text-[var(--accent)] transition-colors cursor-pointer"
-          >
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-          </button>
-
-          {/* Desktop Team Access */}
-          <Link
-            to="/team-access"
-            className={`flex items-center gap-1.5 ml-2 px-3 py-1.5 rounded-md border text-xs transition-colors ${
-              isUnlocked 
-                ? 'text-[var(--accent)] border-[var(--accent)] bg-[var(--accent-soft)]' 
-                : 'text-[var(--text)] border-[var(--border-strong)] hover:text-[var(--accent)] hover:border-[var(--accent)]'
-            }`}
-          >
-            {isUnlocked ? <Unlock size={13} /> : <Lock size={13} />}
-            <span>TEAM</span>
-          </Link>
         </nav>
 
-        {/* HAMBURGER TRIGGER BUTTON (Visible on laptop, tablet, mobile) */}
+        {/* HAMBURGER TRIGGER */}
         <button 
           onClick={() => setOpen(!open)} 
-          className="xl:hidden p-2 rounded-lg text-[var(--text)] hover:text-[var(--accent)] transition-colors cursor-pointer border border-[var(--border-strong)]"
+          className="p-2 rounded-lg text-[var(--text)] hover:bg-[var(--bg-card)] transition-colors border border-transparent hover:border-[var(--border-strong)]"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* MOBILE / TABLET SLIDE-DOWN DRAWER */}
+      {/* DRAWER */}
       {open && (
-        <div className="xl:hidden border-t bg-[var(--bg-elevated)] px-4 py-5 flex flex-col gap-6 max-h-[calc(100vh-4rem)] overflow-y-auto" style={{ borderColor: 'var(--border)' }}>
-          
-          {/* 1. Main Navigation Links */}
-          <nav className="flex flex-col gap-1">
-            <span className="text-[10px] font-mono tracking-widest text-[var(--text-muted)] font-black mb-2 px-3 block">NAVIGATION</span>
-            {links.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `px-3 py-2.5 rounded-lg font-mono text-xs font-bold transition-colors ${
-                    isActive
-                      ? 'text-[var(--accent)] bg-[var(--accent-soft)] border'
-                      : 'text-[var(--text)] hover:bg-[var(--bg-card)]'
-                  }`
-                }
-                style={({ isActive }) => isActive ? { borderColor: 'var(--accent)' } : {}}
-              >
-                {link.label.toUpperCase()}
-              </NavLink>
-            ))}
-          </nav>
-
-          <div className="h-px w-full" style={{ background: 'var(--border)' }} />
-
-          {/* 2. Hardcoded Robotics Features */}
-          <div className="flex flex-col gap-2.5">
-            <span className="text-[10px] font-mono tracking-widest text-[var(--text-muted)] font-black px-3 block">ROBOTICS RESOURCES</span>
+        <div className="absolute top-16 right-0 w-full md:w-80 bg-[var(--bg-elevated)] border-l border-b" style={{ borderColor: 'var(--border)' }}>
+          <div className="p-6 flex flex-col gap-8">
             
-            <a href="https://www.onshape.com" target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-3 rounded-lg font-mono font-bold text-xs text-[var(--text)] bg-[var(--bg-card)] border hover:border-[var(--accent)] transition-colors" style={{ borderColor: 'var(--border-strong)' }}>
-              <span className="flex items-center gap-2.5"><Zap size={14} className="text-amber-500" /> ROBOT_CAD (ONSHAPE)</span>
-              <span className="text-[10px] text-[var(--text-faint)] font-mono">LAUNCH ↗</span>
-            </a>
+            {/* MOBILE ONLY: Main Nav Links in Hamburger */}
+            <nav className="flex flex-col gap-2 lg:hidden">
+              <span className="text-[10px] font-mono font-black text-[var(--text-faint)]">NAVIGATION</span>
+              {links.map((link) => (
+                <NavLink key={link.to} to={link.to} onClick={() => setOpen(false)} className="text-[var(--text)] font-bold py-2 border-b border-[var(--border)]">
+                  {link.label.toUpperCase()}
+                </NavLink>
+              ))}
+            </nav>
 
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-3 rounded-lg font-mono font-bold text-xs text-[var(--text)] bg-[var(--bg-card)] border hover:border-[var(--accent)] transition-colors" style={{ borderColor: 'var(--border-strong)' }}>
-              <span className="flex items-center gap-2.5"><Cpu size={14} className="text-emerald-500" /> SOURCE_CODE (GITHUB)</span>
-              <span className="text-[10px] text-[var(--text-faint)] font-mono">LAUNCH ↗</span>
-            </a>
+            {/* SYSTEM TOOLS (Visible on both) */}
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-mono font-black text-[var(--text-faint)]">SYSTEM</span>
+              <button onClick={toggleTheme} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-card)] border border-[var(--border)]">
+                {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />} THEME: {theme.toUpperCase()}
+              </button>
+              <Link to="/team-access" onClick={() => setOpen(false)} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-card)] border border-[var(--border)]">
+                {isUnlocked ? <Unlock size={16} /> : <Lock size={16} />} {isUnlocked ? 'ADMIN UNLOCKED' : 'TEAM ACCESS'}
+              </Link>
+            </div>
 
-            <a href="https://www.thebluealliance.com/team/7504" target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-3 rounded-lg font-mono font-bold text-xs text-[var(--text)] bg-[var(--bg-card)] border hover:border-[var(--accent)] transition-colors" style={{ borderColor: 'var(--border-strong)' }}>
-              <span className="flex items-center gap-2.5"><Terminal size={14} className="text-sky-500" /> THE BLUE ALLIANCE</span>
-              <span className="text-[10px] text-sky-500 font-bold">#7504 DATA</span>
-            </a>
+            {/* ROBOTICS RESOURCES */}
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-mono font-black text-[var(--text-faint)]">RESOURCES</span>
+              <a href="https://www.onshape.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border)] hover:border-[var(--accent)]">
+                <Zap size={16} className="text-amber-500" /> ON_SHAPE_CAD
+              </a>
+              <a href="https://github.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border)] hover:border-[var(--accent)]">
+                <Cpu size={16} className="text-emerald-500" /> GITHUB_REPO
+              </a>
+              <a href="https://www.thebluealliance.com/team/7504" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border)] hover:border-[var(--accent)]">
+                <Terminal size={16} className="text-sky-500" /> THE_BLUE_ALLIANCE
+              </a>
+            </div>
           </div>
-
-          <div className="h-px w-full" style={{ background: 'var(--border)' }} />
-
-          {/* 3. System Environment (Theme & Access) */}
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-mono tracking-widest text-[var(--text-muted)] font-black px-3 block">SYSTEM ENVIRONMENT</span>
-            
-            <button onClick={toggleTheme} className="flex items-center justify-between w-full px-4 py-3 rounded-lg font-mono text-xs font-bold text-[var(--text)] bg-[var(--bg-card)] border cursor-pointer" style={{ borderColor: 'var(--border-strong)' }}>
-              <span>THEME ENGINE</span>
-              <span className="text-[var(--accent)] font-black">{theme.toUpperCase()}</span>
-            </button>
-
-            <Link to="/team-access" onClick={() => setOpen(false)} className={`flex items-center justify-between w-full px-4 py-3 rounded-lg font-mono text-xs font-bold bg-[var(--bg-card)] border transition-colors ${isUnlocked ? 'text-[var(--accent)] border-[var(--accent)]' : 'text-[var(--text)] border-[var(--border-strong)]'}`}>
-              <span>{isUnlocked ? '🔓 ADMINISTRATIVE ACCESS' : '🔒 SECURITY ACCESS'}</span>
-              <span className="text-[10px] uppercase font-black">{isUnlocked ? 'UNLOCKED' : 'GATEWAY'}</span>
-            </Link>
-          </div>
-
         </div>
       )}
     </header>
