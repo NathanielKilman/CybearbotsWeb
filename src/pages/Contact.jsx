@@ -85,14 +85,15 @@ export default function Contact() {
                 <Mail size={18} />
               </div>
               <div>
-                <p className="label-mono text-[var(--text-faint)] text-[10px] uppercase font-bold tracking-wider">Email Address</p>
-                  bkozlenko@brewsterschools.org<br />
-                  dschneider@brewsterschools.org<br />
-                  jzhinin@brewsterschools.org
-                </a>
+                <p className="label-mono text-[var(--text-faint)] text-[10px] uppercase font-bold tracking-wider mb-1">Email Address</p>
+                <div className="text-sm font-semibold text-[var(--text)] leading-relaxed">
+                  <a href="mailto:bkozlenko@brewsterschools.org" className="hover:underline block">bkozlenko@brewsterschools.org</a>
+                  <a href="mailto:dschneider@brewsterschools.org" className="hover:underline block">dschneider@brewsterschools.org</a>
+                  <a href="mailto:jzhinin@brewsterschools.org" className="hover:underline block">jzhinin@brewsterschools.org</a>
+                </div>
               </div>
             </div>
-
+            
             <div className="card p-4 flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-[var(--bg-elevated)] flex items-center justify-center text-[var(--accent)] border border-[var(--border)] shrink-0">
                 <MapPin size={18} />
