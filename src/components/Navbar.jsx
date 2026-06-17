@@ -99,13 +99,13 @@ export default function Navbar({ robotGalleryVisible = true }) {
             <div className="flex flex-col gap-3">
               <span className="text-[10px] font-mono font-black text-[var(--text-faint)]">RESOURCES</span>
               <a href="https://www.onshape.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border)] hover:border-[var(--accent)]">
-                <Zap size={16} className="text-amber-500" /> ON_SHAPE_CAD
+                <Zap size={16} className="text-amber-500" /> Our CAD
               </a>
               <a href="https://github.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border)] hover:border-[var(--accent)]">
-                <Cpu size={16} className="text-emerald-500" /> GITHUB_REPO
+                <Cpu size={16} className="text-emerald-500" /> Our Github Repo
               </a>
               <a href="https://www.thebluealliance.com/team/7504" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border)] hover:border-[var(--accent)]">
-                <Terminal size={16} className="text-sky-500" /> THE_BLUE_ALLIANCE
+                <Terminal size={16} className="text-sky-500" /> Blue Allience 
               </a>
             </div>
           </div>
