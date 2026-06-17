@@ -171,7 +171,7 @@ export default function Competitions() {
         kicker="TEAM #7504 · SEASON HISTORY"
         title="Competitions"
         corner={`${minYear} → ${maxYear}\nSEASONS`}
-        variant="blue"
+        variant="red"
       />
 
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16">
