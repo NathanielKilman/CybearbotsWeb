@@ -8,8 +8,8 @@ import { useSiteImages } from '../lib/data'
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/our-story', label: 'Our Story' },
-  { to: '/what-is-first', label: 'What is FIRST' },
   { to: '/meet-the-team', label: 'Meet the Team' },
+  { to: '/what-is-first', label: 'What is FIRST' },
   { to: '/competitions', label: 'Competitions' },
   { to: '/robot-gallery', label: 'Robot Gallery' },
   { to: '/news', label: 'News' },
