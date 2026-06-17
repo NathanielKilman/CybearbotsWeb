@@ -175,16 +175,3 @@ a {
   background: var(--accent-soft);
 }
 
-/* Hexagon background pattern */
-.hex-pattern {
-  background-image: radial-gradient(circle at 1px 1px, rgba(59, 162, 113, 0.18) 1px, transparent 1px);
-  background-size: 28px 28px;
-body {
-  overflow-x: hidden; /* This hides the scrollbar temporarily */
-}
-
-/* OR use this to visually spot the runaway element: */
-* {
-  outline: 1px solid red !important;
-}
-}
