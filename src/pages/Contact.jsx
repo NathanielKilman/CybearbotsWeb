@@ -86,8 +86,9 @@ export default function Contact() {
               </div>
               <div>
                 <p className="label-mono text-[var(--text-faint)] text-[10px] uppercase font-bold tracking-wider">Email Address</p>
-                <a href="mailto:mentors@cybearbots.com" className="text-sm font-semibold text-[var(--text)] hover:underline">
-                  mentors@cybearbots.com
+                  bkozlenko@brewsterschools.org<br />
+                  dschneider@brewsterschools.org<br />
+                  jzhinin@brewsterschools.org
                 </a>
               </div>
             </div>
@@ -99,7 +100,7 @@ export default function Contact() {
               <div>
                 <p className="label-mono text-[var(--text-faint)] text-[10px] uppercase font-bold tracking-wider">Lab Location</p>
                 <p className="text-sm font-semibold text-[var(--text)] leading-relaxed">
-                  Brewster High School — Room 104<br />
+                  Brewster High School — Stem Lab<br />
                   50 Foggintown Rd, Brewster, NY 10509
                 </p>
               </div>
