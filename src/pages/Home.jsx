@@ -195,24 +195,23 @@ export default function Home() {
 
 function HomeResources() {
   const { isUnlocked } = useTeamAuth()
-  // Updated table name to match your database
   const { data: resources, refetch } = useTable('public_resources')
 
-  const handleAddResource = async () => {
-    const title = prompt("Enter a title for this resource (e.g., 2026 Team Dossier):")
-    const url = prompt("Enter the destination link/URL:")
-    if (!title || !url) return
+  // Replaced the popups with proper React state
+  const [newTitle, setNewTitle] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+  const [isAdding, setIsAdding] = useState(false)
 
-    // Updated variable to match the 'title' column in the database
-    await supabase.from('public_resources').insert({ title, url })
-    refetch()
-  }
+  const handleAddResource = async (e) => {
+    e.preventDefault() // Prevents the page from refreshing
+    if (!newTitle || !newUrl) return
 
-  const handleUpdateResource = async (id, field, currentValue) => {
-    const newValue = prompt(`Update ${field}:`, currentValue)
-    if (newValue === null || newValue === currentValue) return
-
-    await supabase.from('public_resources').update({ [field]: newValue }).eq('id', id)
+    await supabase.from('public_resources').insert({ title: newTitle, url: newUrl })
+    
+    // Clear the form and hide it, then refresh data
+    setNewTitle('')
+    setNewUrl('')
+    setIsAdding(false)
     refetch()
   }
 
@@ -236,16 +235,44 @@ function HomeResources() {
           </h2>
         </div>
 
+        {/* Toggle the form instead of triggering a popup */}
         {isUnlocked && (
           <button
-            onClick={handleAddResource}
-            className="flex items-center gap-2 label-mono text-xs font-bold px-4 py-2 rounded-lg border transition-all hover:bg-[var(--bg-elevated)]"
+            onClick={() => setIsAdding(!isAdding)}
+            className="flex items-center gap-2 label-mono text-xs font-bold px-4 py-2 rounded-lg border transition-all hover:bg-[var(--bg-elevated)] cursor-pointer"
             style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
           >
-            <Plus size={14} /> ADD NEW FILE/LINK
+            <Plus size={14} /> {isAdding ? 'CANCEL ADD' : 'ADD NEW FILE/LINK'}
           </button>
         )}
       </div>
+
+      {/* THE NEW CLEAN FORM (Only shows when clicking Add) */}
+      {isUnlocked && isAdding && (
+        <form onSubmit={handleAddResource} className="mb-8 p-6 rounded-xl border border-dashed flex flex-col sm:flex-row gap-4 bg-[var(--bg-elevated)]" style={{ borderColor: 'var(--accent)' }}>
+          <input 
+            type="text" 
+            placeholder="Display Title (e.g., 2026 Team Dossier)" 
+            className="flex-1 px-4 py-2 rounded-lg border text-sm bg-[var(--bg)] text-[var(--text)] outline-none focus:border-[var(--accent)]"
+            style={{ borderColor: 'var(--border-strong)' }}
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            required
+          />
+          <input 
+            type="url" 
+            placeholder="URL (https://...)" 
+            className="flex-1 px-4 py-2 rounded-lg border text-sm bg-[var(--bg)] text-[var(--text)] outline-none focus:border-[var(--accent)]"
+            style={{ borderColor: 'var(--border-strong)' }}
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+            required
+          />
+          <button type="submit" className="px-6 py-2 rounded-lg font-mono text-xs font-bold text-white bg-[var(--accent)] hover:opacity-80 transition-opacity cursor-pointer">
+            SAVE RESOURCE
+          </button>
+        </form>
+      )}
 
       {resourceList.length === 0 ? (
         <div className="rounded-xl border border-dashed p-8 text-center text-sm text-[var(--text-faint)]" style={{ borderColor: 'var(--border)' }}>
@@ -262,10 +289,10 @@ function HomeResources() {
               {isUnlocked && (
                 <button
                   onClick={() => handleDeleteResource(item.id)}
-                  className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-all z-10 hover:bg-[var(--border)]"
-                  style={{ borderColor: 'var(--border-strong)' }} /* Removed the red border */
+                  className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-all z-10 hover:bg-[var(--border)] cursor-pointer"
+                  style={{ borderColor: 'var(--border-strong)' }}
                 >
-                  <Trash2 size={12} style={{ color: 'var(--text-muted)' }} /> /* Removed the red icon */
+                  <Trash2 size={12} style={{ color: 'var(--text-muted)' }} />
                 </button>
               )}
 
@@ -278,26 +305,8 @@ function HomeResources() {
                 </div>
 
                 <h3 className="font-display font-bold text-base text-[var(--text)] tracking-tight">
-                  {/* Updated to display 'title' instead of 'label' */}
                   {item.title}
                 </h3>
-                
-                {isUnlocked && (
-                  <div className="flex gap-2 mt-2 pt-2 border-t border-dashed" style={{ borderColor: 'var(--border)' }}>
-                    <button 
-                      onClick={() => handleUpdateResource(item.id, 'title', item.title)}
-                      className="text-[10px] font-mono font-bold text-[var(--text-muted)] hover:text-[var(--accent)]"
-                    >
-                      ✏️ Edit Title
-                    </button>
-                    <button 
-                      onClick={() => handleUpdateResource(item.id, 'url', item.url)}
-                      className="text-[10px] font-mono font-bold text-[var(--text-muted)] hover:text-[var(--accent)]"
-                    >
-                      🔗 Edit Link URL
-                    </button>
-                  </div>
-                )}
               </div>
 
               <a
