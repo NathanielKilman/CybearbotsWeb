@@ -195,8 +195,8 @@ export default function Home() {
 
 function HomeResources() {
   const { isUnlocked } = useTeamAuth()
-  const { data: resources, refetch } = useTable('public_resources')
-
+  const { data: resources, refetch } = useTable('public_resources', { order: 'id', ascending: true })
+  
   // Replaced the popups with proper React state
   const [newTitle, setNewTitle] = useState('')
   const [newUrl, setNewUrl] = useState('')
