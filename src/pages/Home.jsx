@@ -10,7 +10,7 @@ import EditableText from '../components/EditableText'
 const QUICK_LINKS = [
   { to: '/sponsors', label: 'Sponsors', icon: Heart, color: '#3ba271' },
   { to: '/competitions', label: 'Competitions', icon: Trophy, color: '#0066b3' },
-  { to: '/news', label: 'News', icon: Newspaper, color: '#ed1c24' },
+  { to: '/news', label: 'News', icon: Newspaper, color: 'var(--accent)' }, /* Removed the hardcoded red */
   { to: '/contact', label: 'Contact', icon: Users, color: '#3ba271' },
 ]
 
@@ -195,14 +195,16 @@ export default function Home() {
 
 function HomeResources() {
   const { isUnlocked } = useTeamAuth()
-  const { data: resources, refetch } = useTable('team_resources')
+  // Updated table name to match your database
+  const { data: resources, refetch } = useTable('public_resources')
 
   const handleAddResource = async () => {
-    const label = prompt("Enter a label for this resource (e.g., 2026 Team Dossier):")
+    const title = prompt("Enter a title for this resource (e.g., 2026 Team Dossier):")
     const url = prompt("Enter the destination link/URL:")
-    if (!label || !url) return
+    if (!title || !url) return
 
-    await supabase.from('team_resources').insert({ label, url })
+    // Updated variable to match the 'title' column in the database
+    await supabase.from('public_resources').insert({ title, url })
     refetch()
   }
 
@@ -210,13 +212,13 @@ function HomeResources() {
     const newValue = prompt(`Update ${field}:`, currentValue)
     if (newValue === null || newValue === currentValue) return
 
-    await supabase.from('team_resources').update({ [field]: newValue }).eq('id', id)
+    await supabase.from('public_resources').update({ [field]: newValue }).eq('id', id)
     refetch()
   }
 
   const handleDeleteResource = async (id) => {
     if (!confirm("Are you sure you want to remove this link resource?")) return
-    await supabase.from('team_resources').delete().eq('id', id)
+    await supabase.from('public_resources').delete().eq('id', id)
     refetch()
   }
 
@@ -260,10 +262,10 @@ function HomeResources() {
               {isUnlocked && (
                 <button
                   onClick={() => handleDeleteResource(item.id)}
-                  className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-all z-10"
-                  style={{ borderColor: '#ed1c24' }}
+                  className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-all z-10 hover:bg-[var(--border)]"
+                  style={{ borderColor: 'var(--border-strong)' }} /* Removed the red border */
                 >
-                  <Trash2 size={12} style={{ color: '#ed1c24' }} />
+                  <Trash2 size={12} style={{ color: 'var(--text-muted)' }} /> /* Removed the red icon */
                 </button>
               )}
 
@@ -276,16 +278,17 @@ function HomeResources() {
                 </div>
 
                 <h3 className="font-display font-bold text-base text-[var(--text)] tracking-tight">
-                  {item.label}
+                  {/* Updated to display 'title' instead of 'label' */}
+                  {item.title}
                 </h3>
                 
                 {isUnlocked && (
                   <div className="flex gap-2 mt-2 pt-2 border-t border-dashed" style={{ borderColor: 'var(--border)' }}>
                     <button 
-                      onClick={() => handleUpdateResource(item.id, 'label', item.label)}
+                      onClick={() => handleUpdateResource(item.id, 'title', item.title)}
                       className="text-[10px] font-mono font-bold text-[var(--text-muted)] hover:text-[var(--accent)]"
                     >
-                      ✏️ Edit Label
+                      ✏️ Edit Title
                     </button>
                     <button 
                       onClick={() => handleUpdateResource(item.id, 'url', item.url)}
