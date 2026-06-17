@@ -5,20 +5,24 @@
  * @param {string} kicker - small label above the title, e.g. "TEAM #7504 · THE ORIGIN"
  * @param {string} title - big title text, e.g. "Our Story"
  * @param {string} corner - optional small mono text in top-right corner
- * @param {'default'|'green'|'blue'} variant - background color variant
+ * @param {'default'|'green'|'blue'|'red'} variant - background color variant
  */
 export default function PageHero({ kicker, title, corner, variant = 'default' }) {
+  // 1. Added the check for 'red' to use the official FIRST red hex code
   const bg =
     variant === 'green'
       ? 'var(--accent-strong)'
       : variant === 'blue'
       ? 'var(--color-first-blue)'
+      : variant === 'red'
+      ? '#ed1c24'
       : 'var(--bg-elevated)'
 
-  const isSolidColored = variant === 'green' || variant === 'blue'
-const textColor = isSolidColored ? '#ffffff' : 'var(--text)'
-const mutedTextColor = isSolidColored ? 'rgba(255, 255, 255, 0.8)' : 'var(--text-muted)'
-const faintTextColor = isSolidColored ? 'rgba(255, 255, 255, 0.6)' : 'var(--text-faint)'
+  // 2. Added || variant === 'red' here so text turns white on the red background
+  const isSolidColored = variant === 'green' || variant === 'blue' || variant === 'red'
+  const textColor = isSolidColored ? '#ffffff' : 'var(--text)'
+  const mutedTextColor = isSolidColored ? 'rgba(255, 255, 255, 0.8)' : 'var(--text-muted)'
+  const faintTextColor = isSolidColored ? 'rgba(255, 255, 255, 0.6)' : 'var(--text-faint)'
 
   return (
     <section
