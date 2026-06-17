@@ -24,7 +24,10 @@ export default function Home() {
   const mission =
     content.mission_statement ||
     'The mission of CyBearBots is to move past the traditional classroom to include more students, encourage community collaboration with mentors, and immerse ourselves in STEM through our involvement with FIRST.'
+console.log("Database response:", resources)
 
+  return (
+    <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-b" style={{ borderColor: 'var(--border)' }}>
   return (
     <div>
       {/* HERO SECTION */}
