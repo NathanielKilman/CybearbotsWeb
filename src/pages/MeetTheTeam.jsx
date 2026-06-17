@@ -294,11 +294,11 @@ function TeamRolesSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
             <div>
               <strong className="block text-sm text-[var(--text)]">Drive Coach</strong>
-              <span className="text-sm text-[var(--text-muted)]">A dual-threat leader. Off the field, they head the Strategy & Scouting teams. On the field, they act as the match captain, directing real-time strategy behind the glass.</span>
+              <span className="text-sm text-[var(--text-muted)]">A leader. They head the Strategy & Scouting teams. During actually matches, they act as the match captain, directing real-time strategy behind the glass.</span>
             </div>
             <div>
               <strong className="block text-sm text-[var(--text)]">Lead Driver</strong>
-              <span className="text-sm text-[var(--text-muted)]">The pilot controlling the robot's movement and chassis during the chaos of competition.</span>
+              <span className="text-sm text-[var(--text-muted)]">The pilot controlling the robot's movement and chassis during the competition.</span>
             </div>
             <div>
               <strong className="block text-sm text-[var(--text)]">Lead Operator</strong>
@@ -320,7 +320,7 @@ function TeamRolesSection() {
           <ul className="space-y-4 flex-1">
             <li>
               <strong className="block text-sm text-[var(--text)]">Advisors</strong>
-              <span className="text-sm text-[var(--text-muted)]">Dedicated teachers from our school district who oversee the entire club. They are the foundational pillars of our team—without them, CyBearBots simply would not exist.</span>
+              <span className="text-sm text-[var(--text-muted)]">Dedicated teachers from our school district who oversee the entire club. They are the foundational pillars of our team,without them, CyBearBots simply would not exist.</span>
             </li>
             <li>
               <strong className="block text-sm text-[var(--text)]">Mentors</strong>
