@@ -3,6 +3,7 @@ import { Check, ExternalLink, Plus, Trash2, X, Send, Image as ImageIcon } from '
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import ImageUpload from '../components/ImageUpload'
+import ScrollReveal from '../components/ScrollReveal' // Added import
 import { useTable, useSiteContent } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
 import { supabase } from '../lib/supabase'
@@ -243,47 +244,53 @@ export default function Sponsors() {
 
       {/* RECOGNITION BY TIERS */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 space-y-20">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b pb-6" style={{ borderColor: 'var(--border)' }}>
-          <div>
-            <SectionLabel>TEAM PATRONS</SectionLabel>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl mt-2 tracking-tight">
-              Fueling Innovation
-            </h2>
+        <ScrollReveal>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b pb-6" style={{ borderColor: 'var(--border)' }}>
+            <div>
+              <SectionLabel>TEAM PATRONS</SectionLabel>
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl mt-2 tracking-tight">
+                Fueling Innovation
+              </h2>
+            </div>
+            {isUnlocked && (
+              <button
+                onClick={() => setShowAdd(true)}
+                className="flex items-center gap-2 label-mono px-4 py-2.5 rounded-lg border whitespace-nowrap text-xs font-bold transition-all hover:bg-[var(--bg-elevated)]"
+                style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
+              >
+                <Plus size={14} /> ADD SPONSOR
+              </button>
+            )}
           </div>
-          {isUnlocked && (
-            <button
-              onClick={() => setShowAdd(true)}
-              className="flex items-center gap-2 label-mono px-4 py-2.5 rounded-lg border whitespace-nowrap text-xs font-bold transition-all hover:bg-[var(--bg-elevated)]"
-              style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-            >
-              <Plus size={14} /> ADD SPONSOR
-            </button>
-          )}
-        </div>
+        </ScrollReveal>
 
         {TIERS.map((tier) => {
           const matching = sponsors.filter((s) => s.tier === tier.key)
           return (
             <div key={tier.key} className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-6 rounded-sm" style={{ background: tier.color }} />
-                <h3 className="font-display font-black text-2xl tracking-tight">{tier.name}</h3>
-                <span className="text-xs label-mono text-[var(--text-muted)] bg-[var(--bg-elevated)] px-2.5 py-1 rounded-md ml-2 border" style={{ borderColor: 'var(--border)' }}>
-                  {tier.range}
-                </span>
-              </div>
+              <ScrollReveal>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-6 rounded-sm" style={{ background: tier.color }} />
+                  <h3 className="font-display font-black text-2xl tracking-tight">{tier.name}</h3>
+                  <span className="text-xs label-mono text-[var(--text-muted)] bg-[var(--bg-elevated)] px-2.5 py-1 rounded-md ml-2 border" style={{ borderColor: 'var(--border)' }}>
+                    {tier.range}
+                  </span>
+                </div>
+              </ScrollReveal>
 
-              {matching.length === 0 ? (
-                <div className="rounded-xl border border-dashed p-10 text-center text-sm text-[var(--text-faint)]" style={{ borderColor: 'var(--border)' }}>
-                  No sponsors listed in {tier.name} yet.
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                  {matching.map((s) => (
-                    <SponsorCard key={s.id} sponsor={s} isUnlocked={isUnlocked} onDelete={handleDelete} />
-                  ))}
-                </div>
-              )}
+              <ScrollReveal>
+                {matching.length === 0 ? (
+                  <div className="rounded-xl border border-dashed p-10 text-center text-sm text-[var(--text-faint)]" style={{ borderColor: 'var(--border)' }}>
+                    No sponsors listed in {tier.name} yet.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {matching.map((s) => (
+                      <SponsorCard key={s.id} sponsor={s} isUnlocked={isUnlocked} onDelete={handleDelete} />
+                    ))}
+                  </div>
+                )}
+              </ScrollReveal>
             </div>
           )
         })}
@@ -291,145 +298,153 @@ export default function Sponsors() {
 
       {/* HOW TO SUPPORT */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 border-t" style={{ borderColor: 'var(--border)' }}>
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <SectionLabel center>INVEST IN TOMORROW</SectionLabel>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl mt-3 tracking-tight">How to Sponsor CyBearBots</h2>
-          <p className="text-[var(--text-muted)] mt-4 leading-relaxed">
-            We accept support through institutional avenues, material donations, or check payments. 
-            All financial gifts go directly toward tournament admission fees, fabrication hardware, and tools.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="card p-6 flex flex-col">
-            <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 1 · BOOSTERS</p>
-            <h3 className="font-display font-bold text-xl mb-3">Check / Invoice</h3>
-            <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">
-              Checks can be made payable directly to our school booster accounting department. We will supply full W-9 forms and receipts.
+        <ScrollReveal>
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <SectionLabel center>INVEST IN TOMORROW</SectionLabel>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl mt-3 tracking-tight">How to Sponsor CyBearBots</h2>
+            <p className="text-[var(--text-muted)] mt-4 leading-relaxed">
+              We accept support through institutional avenues, material donations, or check payments. 
+              All financial gifts go directly toward tournament admission fees, fabrication hardware, and tools.
             </p>
-            <div className="rounded-xl p-4 font-mono text-xs mt-auto bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
-              Brewster High School Student Activity Fund<br />
-              50 Foggintown Rd<br />
-              Brewster, NY 10509
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="card p-6 flex flex-col">
+              <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 1 · BOOSTERS</p>
+              <h3 className="font-display font-bold text-xl mb-3">Check / Invoice</h3>
+              <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">
+                Checks can be made payable directly to our school booster accounting department. We will supply full W-9 forms and receipts.
+              </p>
+              <div className="rounded-xl p-4 font-mono text-xs mt-auto bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+                Brewster High School Student Activity Fund<br />
+                50 Foggintown Rd<br />
+                Brewster, NY 10509
+              </div>
+            </div>
+
+            <div className="card p-6 flex flex-col">
+              <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 2 · EQUIPMENT</p>
+              <h3 className="font-display font-bold text-xl mb-3">Material Donations</h3>
+              <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">
+                We highly welcome industrial materials, machining tools, safety inventory, or electronics components.
+              </p>
+              <a
+                href="/contact"
+                className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold border text-sm transition-all hover:bg-[var(--bg-elevated)]"
+                style={{ borderColor: 'var(--border)' }}
+              >
+                Coordinate Material Gift
+              </a>
+            </div>
+
+            <div className="card p-6 flex flex-col">
+              <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 3 · FIRST DIRECT</p>
+              <h3 className="font-display font-bold text-xl mb-3">Via FIRST HQ</h3>
+              <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">Donations can be processed through FIRST directly mapped to our account identity:</p>
+              <div className="rounded-xl p-4 font-mono text-xs mb-4 bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+                Credit Card: Fill out the online form<br />
+  • Standard Check: Payable to FIRST, PO Box 845446 Boston, MA 02284-5446<br />
+  • Overnight Check: Payable to F.I.R.S.T - 845446, Attn: Lockbox Processing, 10 Dan Road, Canton, MA 02021
+              </div>
+              <a
+                href={paymentFormUrl || 'https://forms.office.com/pages/responsepage.aspx?id=v8Pzh9Ft7ES9j5nk5iLvhOw1q45GiRBOij4A7R_n2ClUNFNTNEdGT0hOU1c0QUdKOTdNNk5BVU1ZQiQlQCN0PWcu'}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm"
+                style={{ background: 'var(--accent-strong)' }}
+              >
+                Online Payment Form <ExternalLink size={14} />
+              </a>
             </div>
           </div>
-
-          <div className="card p-6 flex flex-col">
-            <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 2 · EQUIPMENT</p>
-            <h3 className="font-display font-bold text-xl mb-3">Material Donations</h3>
-            <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">
-              We highly welcome industrial materials, machining tools, safety inventory, or electronics components.
-            </p>
-            <a
-              href="/contact"
-              className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold border text-sm transition-all hover:bg-[var(--bg-elevated)]"
-              style={{ borderColor: 'var(--border)' }}
-            >
-              Coordinate Material Gift
-            </a>
-          </div>
-
-          <div className="card p-6 flex flex-col">
-            <p className="label-mono mb-2 text-xs text-[var(--text-faint)]">OPTION 3 · FIRST DIRECT</p>
-            <h3 className="font-display font-bold text-xl mb-3">Via FIRST HQ</h3>
-            <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">Donations can be processed through FIRST directly mapped to our account identity:</p>
-            <div className="rounded-xl p-4 font-mono text-xs mb-4 bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
-              Credit Card: Fill out the online form<br />
-• Standard Check: Payable to FIRST, PO Box 845446 Boston, MA 02284-5446<br />
-• Overnight Check: Payable to F.I.R.S.T - 845446, Attn: Lockbox Processing, 10 Dan Road, Canton, MA 02021
-            </div>
-            <a
-              href={paymentFormUrl || 'https://forms.office.com/pages/responsepage.aspx?id=v8Pzh9Ft7ES9j5nk5iLvhOw1q45GiRBOij4A7R_n2ClUNFNTNEdGT0hOU1c0QUdKOTdNNk5BVU1ZQiQlQCN0PWcu'}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm"
-              style={{ background: 'var(--accent-strong)' }}
-            >
-              Online Payment Form <ExternalLink size={14} />
-            </a>
-          </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* INQUIRY FORM SECTION */}
       <section className="max-w-3xl mx-auto px-4 lg:px-6 py-16 border-t" style={{ borderColor: 'var(--border)' }}>
-        <div className="text-center mb-10">
-          <SectionLabel center>BECOME A PARTNER</SectionLabel>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl mt-3 tracking-tight">Sponsor Inquiry</h2>
-        </div>
-        
-        {formStatus === 'sent' ? (
-          <div className="card p-8 text-center max-w-md mx-auto space-y-3">
-            <div className="w-12 h-12 rounded-full bg-[var(--accent-soft)] flex items-center justify-center mx-auto text-[var(--accent)]">
-              <Check size={24} />
-            </div>
-            <h3 className="font-display font-bold text-xl">Inquiry Received!</h3>
-            <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-              Thank you for reaching out to support CyBearBots. A team representative or mentor will contact you shortly.
-            </p>
+        <ScrollReveal>
+          <div className="text-center mb-10">
+            <SectionLabel center>BECOME A PARTNER</SectionLabel>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl mt-3 tracking-tight">Sponsor Inquiry</h2>
           </div>
-        ) : (
-          <form onSubmit={handleInquirySubmit} className="card p-6 sm:p-8 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        </ScrollReveal>
+        
+        <ScrollReveal>
+          {formStatus === 'sent' ? (
+            <div className="card p-8 text-center max-w-md mx-auto space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[var(--accent-soft)] flex items-center justify-center mx-auto text-[var(--accent)]">
+                <Check size={24} />
+              </div>
+              <h3 className="font-display font-bold text-xl">Inquiry Received!</h3>
+              <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+                Thank you for reaching out to support CyBearBots. A team representative or mentor will contact you shortly.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleInquirySubmit} className="card p-6 sm:p-8 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="label-mono block mb-1 text-xs">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
+                    style={{ borderColor: 'var(--border)' }}
+                    value={inquiry.name}
+                    onChange={(e) => setInquiry(f => ({ ...f, name: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="label-mono block mb-1 text-xs">Company / Organization</label>
+                  <input
+                    type="text"
+                    className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
+                    style={{ borderColor: 'var(--border)' }}
+                    value={inquiry.company}
+                    onChange={(e) => setInquiry(f => ({ ...f, company: e.target.value }))}
+                  />
+                </div>
+              </div>
               <div>
-                <label className="label-mono block mb-1 text-xs">Your Name *</label>
+                <label className="label-mono block mb-1 text-xs">Email Address *</label>
                 <input
-                  type="text"
+                  type="email"
                   required
                   className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
                   style={{ borderColor: 'var(--border)' }}
-                  value={inquiry.name}
-                  onChange={(e) => setInquiry(f => ({ ...f, name: e.target.value }))}
+                  value={inquiry.email}
+                  onChange={(e) => setInquiry(f => ({ ...f, email: e.target.value }))}
                 />
               </div>
               <div>
-                <label className="label-mono block mb-1 text-xs">Company / Organization</label>
-                <input
-                  type="text"
+                <label className="label-mono block mb-1 text-xs">Message / Comments</label>
+                <textarea
+                  rows={5}
                   className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
                   style={{ borderColor: 'var(--border)' }}
-                  value={inquiry.company}
-                  onChange={(e) => setInquiry(f => ({ ...f, company: e.target.value }))}
+                  value={inquiry.message}
+                  onChange={(e) => setInquiry(f => ({ ...f, message: e.target.value }))}
+                  placeholder="Let us know how you would like to partner with our team..."
                 />
               </div>
-            </div>
-            <div>
-              <label className="label-mono block mb-1 text-xs">Email Address *</label>
-              <input
-                type="email"
-                required
-                className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
-                style={{ borderColor: 'var(--border)' }}
-                value={inquiry.email}
-                onChange={(e) => setInquiry(f => ({ ...f, email: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="label-mono block mb-1 text-xs">Message / Comments</label>
-              <textarea
-                rows={5}
-                className="w-full bg-transparent border rounded-lg p-2.5 outline-none text-sm"
-                style={{ borderColor: 'var(--border)' }}
-                value={inquiry.message}
-                onChange={(e) => setInquiry(f => ({ ...f, message: e.target.value }))}
-                placeholder="Let us know how you would like to partner with our team..."
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={formStatus === 'sending'}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm transition-opacity disabled:opacity-50"
-              style={{ background: 'var(--accent-strong)' }}
-            >
-              <Send size={15} /> {formStatus === 'sending' ? 'Sending Inquiry...' : 'Submit Inquiry'}
-            </button>
-            {formStatus === 'error' && (
-              <p className="text-xs text-center font-semibold" style={{ color: '#ed1c24' }}>
-                Failed to send message. Please try again or reach out to us via email.
-              </p>
-            )}
-          </form>
-        )}
+              <button
+                type="submit"
+                disabled={formStatus === 'sending'}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm transition-opacity disabled:opacity-50"
+                style={{ background: 'var(--accent-strong)' }}
+              >
+                <Send size={15} /> {formStatus === 'sending' ? 'Sending Inquiry...' : 'Submit Inquiry'}
+              </button>
+              {formStatus === 'error' && (
+                <p className="text-xs text-center font-semibold" style={{ color: '#ed1c24' }}>
+                  Failed to send message. Please try again or reach out to us via email.
+                </p>
+              )}
+            </form>
+          )}
+        </ScrollReveal>
       </section>
 
       {showAdd && <AddSponsorModal onClose={() => setShowAdd(false)} onSaved={refetch} />}
