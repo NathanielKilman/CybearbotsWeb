@@ -1,40 +1,25 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import Layout from './components/Layout'
-import Home from './pages/Home'
-import Story from './pages/Story'
-// ... import your other pages here
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import Navbar from './Navbar'
+import Footer from './Footer'
+import { useSiteContent } from '../lib/data'
 
-export default function App() {
+export default function Layout({ children }) {
   const location = useLocation()
+  const { content } = useSiteContent()
+  const robotGalleryVisible = content.robot_gallery_visible !== false
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   return (
-    <Layout>
-      {/* 1. mode="wait" guarantees the old page goes completely invisible and unmounts FIRST */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          // 2. Pure fade out for the old page
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          // 3. Slide up effect ONLY when the next page appears
-          exit={{ opacity: 0 }}
-          transition={{ 
-            duration: 0.25, 
-            ease: "easeInOut" 
-          }}
-          style={{ 
-            // This fallback forces standard CPU rendering to look smooth on basic office PCs
-            transform: "translateZ(0)" 
-          }}
-        >
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/story" element={<Story />} />
-            {/* Add your other routes here */}
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
-    </Layout>
+    <div className="min-h-screen flex flex-col">
+      <Navbar robotGalleryVisible={robotGalleryVisible} />
+      <main className="flex-1">
+        {children}
+      </main>
+      <Footer />
+    </div>
   )
 }
