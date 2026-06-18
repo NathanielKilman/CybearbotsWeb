@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import ImageUpload from '../components/ImageUpload'
+import ScrollReveal from '../components/ScrollReveal' // Added import
 import { useSiteImages } from '../lib/data'
 
 const PROGRAMS = [
@@ -69,103 +70,114 @@ export default function WhatIsFirst() {
       {/* THE MISSION */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-          <div>
-            <SectionLabel>THE MISSION</SectionLabel>
-            <h2 className="font-display font-extrabold text-4xl lg:text-5xl mt-3 mb-6 leading-tight">
-              A Global Movement for STEM
-            </h2>
-            <div className="text-[var(--text-muted)] leading-relaxed space-y-4">
-              <p>
-               FIRST (For Inspiration and Recognition of Science and Technology) is a nonprofit organization
-                founded in 1989 by inventor and entrepreneur Dean Kamen. Its mission is to inspire young people to
-                be science and technology leaders and innovators, by engaging them in exciting mentor-based
-                programs.
-              </p>
-              <p>
-                Unlike a typical science fair or classroom project, FIRST programs are structured like real engineering
-                challenges, complete with deadlines, budgets, sponsors, and live competition. Students don't just
-                learn about STEM; they practice it.
-              </p>
-              <p>
-                Today, FIRST operates in more than 110 countries, reaching over 680,000 students with programs
-                spanning kindergarten through 12th grade.
-              </p>
-              <a
-                href="https://www.firstinspires.org"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 hover:underline"
-                style={{ color: 'var(--accent)' }}
-              >
-                Learn more at firstinspires.org <ExternalLink size={14} />
-              </a>
+          <ScrollReveal>
+            <div>
+              <SectionLabel>THE MISSION</SectionLabel>
+              <h2 className="font-display font-extrabold text-4xl lg:text-5xl mt-3 mb-6 leading-tight">
+                A Global Movement for STEM
+              </h2>
+              <div className="text-[var(--text-muted)] leading-relaxed space-y-4">
+                <p>
+                 FIRST (For Inspiration and Recognition of Science and Technology) is a nonprofit organization
+                  founded in 1989 by inventor and entrepreneur Dean Kamen. Its mission is to inspire young people to
+                  be science and technology leaders and innovators, by engaging them in exciting mentor-based
+                  programs.
+                </p>
+                <p>
+                  Unlike a typical science fair or classroom project, FIRST programs are structured like real engineering
+                  challenges, complete with deadlines, budgets, sponsors, and live competition. Students don't just
+                  learn about STEM; they practice it.
+                </p>
+                <p>
+                  Today, FIRST operates in more than 110 countries, reaching over 680,000 students with programs
+                  spanning kindergarten through 12th grade.
+                </p>
+                <a
+                  href="https://www.firstinspires.org"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:underline"
+                  style={{ color: 'var(--accent)' }}
+                >
+                  Learn more at firstinspires.org <ExternalLink size={14} />
+                </a>
+              </div>
             </div>
-          </div>
-          <ImageUpload
-            src={images.first_logo_graphic}
-            onUpload={(url) => setImage('first_logo_graphic', url)}
-            label="UPLOAD FIRST LOGO / PROGRAM GRAPHIC"
-            folder="first"
-            aspect="aspect-[4/5]"
-          />
+          </ScrollReveal>
+          <ScrollReveal>
+            <ImageUpload
+              src={images.first_logo_graphic}
+              onUpload={(url) => setImage('first_logo_graphic', url)}
+              label="UPLOAD FIRST LOGO / PROGRAM GRAPHIC"
+              folder="first"
+              aspect="aspect-[4/5]"
+            />
+          </ScrollReveal>
         </div>
       </section>
 
       {/* FOUR PROGRAMS */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16">
-        <div className="text-center mb-12">
-          <SectionLabel center>THE PATHWAYS</SectionLabel>
-          <h2 className="font-display font-extrabold text-4xl lg:text-5xl mt-3 mb-4">Four Programs, One Pipeline</h2>
-          <p className="text-[var(--text-muted)] max-w-2xl mx-auto">
-            FIRST offers a continuous K-12 progression of programs, each building on the last to
-            develop increasingly sophisticated STEM skills.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <SectionLabel center>THE PATHWAYS</SectionLabel>
+            <h2 className="font-display font-extrabold text-4xl lg:text-5xl mt-3 mb-4">Four Programs, One Pipeline</h2>
+            <p className="text-[var(--text-muted)] max-w-2xl mx-auto">
+              FIRST offers a continuous K-12 progression of programs, each building on the last to
+              develop increasingly sophisticated STEM skills.
+            </p>
+          </div>
+        </ScrollReveal>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {PROGRAMS.map((p) => (
-            <div
-              key={p.tag}
-              className="card p-6"
-              style={p.highlight ? { borderColor: 'var(--accent)' } : undefined}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span
-                  className="px-3 py-1 rounded-md text-xs font-bold text-white"
-                  style={{ background: p.tagColor }}
-                >
-                  {p.tag}
-                </span>
-                <span className="label-mono px-2 py-1 rounded-md" style={{ background: 'var(--bg-elevated)' }}>
-                  {p.ages}
-                </span>
+            <ScrollReveal key={p.tag}>
+              <div
+                className="card h-full p-6"
+                style={p.highlight ? { borderColor: 'var(--accent)' } : undefined}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <span
+                    className="px-3 py-1 rounded-md text-xs font-bold text-white"
+                    style={{ background: p.tagColor }}
+                  >
+                    {p.tag}
+                  </span>
+                  <span className="label-mono px-2 py-1 rounded-md" style={{ background: 'var(--bg-elevated)' }}>
+                    {p.ages}
+                  </span>
+                </div>
+                <h3 className="font-display font-bold text-xl mb-2">{p.name}</h3>
+                <p className="text-[var(--text-muted)] leading-relaxed">{p.body}</p>
+                {p.highlight && (
+                  <p className="label-mono mt-4 pt-4 border-t" style={{ color: 'var(--accent)', borderColor: 'var(--border)' }}>
+                    ← CYBEARBOTS COMPETES HERE
+                  </p>
+                )}
               </div>
-              <h3 className="font-display font-bold text-xl mb-2">{p.name}</h3>
-              <p className="text-[var(--text-muted)] leading-relaxed">{p.body}</p>
-              {p.highlight && (
-                <p className="label-mono mt-4 pt-4 border-t" style={{ color: 'var(--accent)', borderColor: 'var(--border)' }}>
-                  ← CYBEARBOTS COMPETES HERE
-                </p>
-              )}
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
       {/* HOW FRC WORKS */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16">
-        <div className="text-center mb-12">
-          <SectionLabel center>THE COMPETITION</SectionLabel>
-          <h2 className="font-display font-extrabold text-4xl lg:text-5xl mt-3">How FRC Works</h2>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <SectionLabel center>THE COMPETITION</SectionLabel>
+            <h2 className="font-display font-extrabold text-4xl lg:text-5xl mt-3">How FRC Works</h2>
+          </div>
+        </ScrollReveal>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {HOW_FRC_WORKS.map((step) => (
-            <div key={step.num} className="card p-8">
-              <p className="font-display font-black text-4xl mb-4" style={{ color: 'var(--text-faint)' }}>
-                {step.num}
-              </p>
-              <h3 className="font-display font-bold text-xl mb-2">{step.title}</h3>
-              <p className="text-[var(--text-muted)] leading-relaxed">{step.body}</p>
-            </div>
+            <ScrollReveal key={step.num}>
+              <div className="card h-full p-8">
+                <p className="font-display font-black text-4xl mb-4" style={{ color: 'var(--text-faint)' }}>
+                  {step.num}
+                </p>
+                <h3 className="font-display font-bold text-xl mb-2">{step.title}</h3>
+                <p className="text-[var(--text-muted)] leading-relaxed">{step.body}</p>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>
