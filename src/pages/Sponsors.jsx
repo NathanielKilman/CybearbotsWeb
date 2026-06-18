@@ -308,8 +308,7 @@ export default function Sponsors() {
               Checks can be made payable directly to our school booster accounting department. We will supply full W-9 forms and receipts.
             </p>
             <div className="rounded-xl p-4 font-mono text-xs mt-auto bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
-              Brewster High School<br />
-              Attn: CyBearBots Robotics #7504<br />
+              Brewster High School Student Activity Fund<br />
               50 Foggintown Rd<br />
               Brewster, NY 10509
             </div>
@@ -335,12 +334,12 @@ export default function Sponsors() {
             <h3 className="font-display font-bold text-xl mb-3">Via FIRST HQ</h3>
             <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">Donations can be processed through FIRST directly mapped to our account identity:</p>
             <div className="rounded-xl p-4 font-mono text-xs mb-4 bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
-              FIRST Robotics HQ<br />
-              PO Box 845446<br />
-              Boston, MA 02284-5446
+              Credit Card: Fill out the online form<br />
+• Standard Check: Payable to FIRST, PO Box 845446 Boston, MA 02284-5446<br />
+• Overnight Check: Payable to F.I.R.S.T - 845446, Attn: Lockbox Processing, 10 Dan Road, Canton, MA 02021
             </div>
             <a
-              href={paymentFormUrl || 'https://www.firstinspires.org'}
+              href={paymentFormUrl || 'https://forms.office.com/pages/responsepage.aspx?id=v8Pzh9Ft7ES9j5nk5iLvhOw1q45GiRBOij4A7R_n2ClUNFNTNEdGT0hOU1c0QUdKOTdNNk5BVU1ZQiQlQCN0PWcu'}
               target="_blank"
               rel="noreferrer"
               className="mt-auto flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white text-sm"
