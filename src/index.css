@@ -127,15 +127,6 @@ a {
 .fade-up-3 { animation-delay: 0.19s; }
 .fade-up-4 { animation-delay: 0.26s; }
 
-/* Page transition */
-@keyframes page-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.page-fade {
-  animation: page-fade 0.35s ease both;
-}
-
 /* Scroll reveal */
 .reveal {
   opacity: 0;
