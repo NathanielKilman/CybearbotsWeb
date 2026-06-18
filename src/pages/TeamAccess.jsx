@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Lock, Plus, Trash2, X, Check, GripVertical, Settings } from 'lucide-react'
 import PageHero from '../components/PageHero'
+import ScrollReveal from '../components/ScrollReveal' // Added import
 import { useTable, useSiteContent } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
 import { supabase } from '../lib/supabase'
@@ -31,35 +32,37 @@ function PasswordGate() {
 
   return (
     <section className="max-w-md mx-auto px-4 py-24 text-center">
-      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: 'var(--accent-soft)' }}>
-        <Lock size={28} style={{ color: 'var(--accent)' }} />
-      </div>
-      <h1 className="font-display font-extrabold text-3xl mb-2">Team Access</h1>
-      <p className="text-[var(--text-muted)] mb-8">
-        Enter the shared team password to access the build season task board and admin tools.
-      </p>
-      <form onSubmit={submit} className="space-y-4">
-        <input
-          type="password"
-          autoFocus
-          className="w-full bg-transparent border rounded-lg p-3 text-center outline-none"
-          style={{ borderColor: error ? '#ed1c24' : 'var(--border)' }}
-          placeholder="Team password"
-          value={pw}
-          onChange={(e) => {
-            setPw(e.target.value)
-            setError(false)
-          }}
-        />
-        {error && <p className="text-sm" style={{ color: '#ed1c24' }}>Incorrect password. Try again.</p>}
-        <button
-          type="submit"
-          className="w-full py-3 rounded-lg font-semibold text-white"
-          style={{ background: 'var(--accent-strong)' }}
-        >
-          Unlock
-        </button>
-      </form>
+      <ScrollReveal>
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: 'var(--accent-soft)' }}>
+          <Lock size={28} style={{ color: 'var(--accent)' }} />
+        </div>
+        <h1 className="font-display font-extrabold text-3xl mb-2">Team Access</h1>
+        <p className="text-[var(--text-muted)] mb-8">
+          Enter the shared team password to access the build season task board and admin tools.
+        </p>
+        <form onSubmit={submit} className="space-y-4">
+          <input
+            type="password"
+            autoFocus
+            className="w-full bg-transparent border rounded-lg p-3 text-center outline-none"
+            style={{ borderColor: error ? '#ed1c24' : 'var(--border)' }}
+            placeholder="Team password"
+            value={pw}
+            onChange={(e) => {
+              setPw(e.target.value)
+              setError(false)
+            }}
+          />
+          {error && <p className="text-sm" style={{ color: '#ed1c24' }}>Incorrect password. Try again.</p>}
+          <button
+            type="submit"
+            className="w-full py-3 rounded-lg font-semibold text-white"
+            style={{ background: 'var(--accent-strong)' }}
+          >
+            Unlock
+          </button>
+        </form>
+      </ScrollReveal>
     </section>
   )
 }
@@ -279,56 +282,60 @@ function TaskBoard() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <p className="label-mono mb-1" style={{ color: 'var(--accent)' }}>BUILD SEASON</p>
-          <h1 className="font-display font-extrabold text-3xl lg:text-4xl">Task Board</h1>
+      <ScrollReveal>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="label-mono mb-1" style={{ color: 'var(--accent)' }}>BUILD SEASON</p>
+            <h1 className="font-display font-extrabold text-3xl lg:text-4xl">Task Board</h1>
+          </div>
+          <button
+            onClick={lock}
+            className="label-mono px-4 py-2 rounded-lg border flex items-center gap-2"
+            style={{ borderColor: 'var(--border)' }}
+          >
+            <Lock size={14} /> LOCK
+          </button>
         </div>
-        <button
-          onClick={lock}
-          className="label-mono px-4 py-2 rounded-lg border flex items-center gap-2"
-          style={{ borderColor: 'var(--border)' }}
-        >
-          <Lock size={14} /> LOCK
-        </button>
-      </div>
+      </ScrollReveal>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        {sections.map((section) => {
-          const sectionTasks = tasks.filter((t) => t.section_id === section.id)
-          return (
-            <div key={section.id} className="flex flex-col gap-3">
-              <div className="flex items-center justify-between group">
-                <h3 className="font-display font-bold flex items-center gap-2">
-                  <GripVertical size={14} className="text-[var(--text-faint)]" />
-                  {section.name}
-                  <span className="label-mono">{sectionTasks.length}</span>
-                </h3>
+      <ScrollReveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          {sections.map((section) => {
+            const sectionTasks = tasks.filter((t) => t.section_id === section.id)
+            return (
+              <div key={section.id} className="flex flex-col gap-3">
+                <div className="flex items-center justify-between group">
+                  <h3 className="font-display font-bold flex items-center gap-2">
+                    <GripVertical size={14} className="text-[var(--text-faint)]" />
+                    {section.name}
+                    <span className="label-mono">{sectionTasks.length}</span>
+                  </h3>
+                  <button
+                    onClick={() => handleDeleteSection(section.id)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ color: '#ed1c24' }}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {sectionTasks.map((task) => (
+                    <TaskCard key={task.id} task={task} onDelete={handleDeleteTask} refetch={refetchTasks} />
+                  ))}
+                </div>
                 <button
-                  onClick={() => handleDeleteSection(section.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ color: '#ed1c24' }}
+                  onClick={() => setAddingTo(section.id)}
+                  className="label-mono flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed justify-center"
+                  style={{ borderColor: 'var(--border-strong)', color: 'var(--text-faint)' }}
                 >
-                  <Trash2 size={13} />
+                  <Plus size={14} /> ADD TASK
                 </button>
               </div>
-              <div className="flex flex-col gap-2">
-                {sectionTasks.map((task) => (
-                  <TaskCard key={task.id} task={task} onDelete={handleDeleteTask} refetch={refetchTasks} />
-                ))}
-              </div>
-              <button
-                onClick={() => setAddingTo(section.id)}
-                className="label-mono flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed justify-center"
-                style={{ borderColor: 'var(--border-strong)', color: 'var(--text-faint)' }}
-              >
-                <Plus size={14} /> ADD TASK
-              </button>
-            </div>
-          )
-        })}
-        <AddSectionInline onSaved={refetchSections} />
-      </div>
+            )
+          })}
+          <AddSectionInline onSaved={refetchSections} />
+        </div>
+      </ScrollReveal>
 
       {addingTo && (
         <AddTaskModal
@@ -357,41 +364,43 @@ function AdminSettings() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
-      <div className="card p-6">
-        <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
-          <Settings size={18} /> Site Settings
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label className="label-mono block mb-1">Team Access Password</label>
-            <div className="flex gap-2">
-              <input
-                className="flex-1 bg-transparent border rounded-lg p-2 outline-none"
-                style={{ borderColor: 'var(--border)' }}
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
-              />
+      <ScrollReveal>
+        <div className="card p-6">
+          <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
+            <Settings size={18} /> Site Settings
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label className="label-mono block mb-1">Team Access Password</label>
+              <div className="flex gap-2">
+                <input
+                  className="flex-1 bg-transparent border rounded-lg p-2 outline-none"
+                  style={{ borderColor: 'var(--border)' }}
+                  value={pw}
+                  onChange={(e) => setPw(e.target.value)}
+                />
+                <button
+                  onClick={savePassword}
+                  className="px-4 py-2 rounded-lg text-white text-sm font-semibold"
+                  style={{ background: 'var(--accent-strong)' }}
+                >
+                  {saved ? 'Saved!' : 'Save'}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="label-mono block mb-1">Robot Gallery Page</label>
               <button
-                onClick={savePassword}
-                className="px-4 py-2 rounded-lg text-white text-sm font-semibold"
-                style={{ background: 'var(--accent-strong)' }}
+                onClick={() => setValue('robot_gallery_visible', !robotGalleryVisible)}
+                className="w-full px-4 py-2 rounded-lg border text-sm font-semibold"
+                style={{ borderColor: 'var(--border)' }}
               >
-                {saved ? 'Saved!' : 'Save'}
+                {robotGalleryVisible ? 'Visible in navigation (click to hide)' : 'Hidden from navigation (click to show)'}
               </button>
             </div>
           </div>
-          <div>
-            <label className="label-mono block mb-1">Robot Gallery Page</label>
-            <button
-              onClick={() => setValue('robot_gallery_visible', !robotGalleryVisible)}
-              className="w-full px-4 py-2 rounded-lg border text-sm font-semibold"
-              style={{ borderColor: 'var(--border)' }}
-            >
-              {robotGalleryVisible ? 'Visible in navigation (click to hide)' : 'Hidden from navigation (click to show)'}
-            </button>
-          </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   )
 }
