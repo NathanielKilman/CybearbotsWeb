@@ -2,8 +2,8 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import Story from './pages/Story'
-// Note: If you have other pages (like Contact, Gallery, etc.), import them here too!
+// 1. Changed this line from "./pages/Story" to "./pages/OurStory"
+import OurStory from './pages/OurStory' 
 
 export default function App() {
   const location = useLocation()
@@ -24,8 +24,8 @@ export default function App() {
         >
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/story" element={<Story />} />
-            {/* Add your other <Route> paths here if you have more pages */}
+            {/* 2. Changed this element from <Story /> to <OurStory /> */}
+            <Route path="/story" element={<OurStory />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
