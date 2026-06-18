@@ -3,8 +3,6 @@ import { useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import { useSiteContent } from '../lib/data'
-
-// 1. Import Framer Motion
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Layout({ children }) {
@@ -17,24 +15,27 @@ export default function Layout({ children }) {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-hidden">
       <Navbar robotGalleryVisible={robotGalleryVisible} />
       
-      {/* 2. AnimatePresence acts as the traffic cop */}
       <AnimatePresence mode="wait">
-        
-        {/* 3. motion.main handles the actual sliding/fading */}
         <motion.main 
           key={location.pathname} 
           className="flex-1"
-          initial={{ opacity: 0, y: 15 }}
+          // We reduce the movement from 15px to 6px so it doesn't "jump" heavily
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          exit={{ opacity: 0, y: -6 }}
+          // Switching to spring physics for ultra-smooth rendering
+          transition={{ 
+            type: "spring",
+            stiffness: 260,
+            damping: 26,
+            mass: 0.5
+          }}
         >
           {children}
         </motion.main>
-
       </AnimatePresence>
 
       <Footer />
