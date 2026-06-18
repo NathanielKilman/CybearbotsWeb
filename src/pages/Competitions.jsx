@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import ImageUpload from '../components/ImageUpload'
 import EditableText from '../components/EditableText'
+import ScrollReveal from '../components/ScrollReveal'
 import { useTable } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
 import { supabase } from '../lib/supabase'
@@ -203,14 +204,16 @@ export default function Competitions() {
           />
           <div className="space-y-12">
             {data.map((season, idx) => (
-              <SeasonRow
-                key={season.id}
-                season={season}
-                flip={idx % 2 === 1}
-                isUnlocked={isUnlocked}
-                onDelete={handleDelete}
-                refetch={refetch}
-              />
+              /* Wrapped each row in the new scroll reveal component */
+              <ScrollReveal key={season.id}>
+                <SeasonRow
+                  season={season}
+                  flip={idx % 2 === 1}
+                  isUnlocked={isUnlocked}
+                  onDelete={handleDelete}
+                  refetch={refetch}
+                />
+              </ScrollReveal>
             ))}
           </div>
         </div>
