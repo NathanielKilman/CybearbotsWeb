@@ -21,8 +21,12 @@ export default function Footer() {
   const { images } = useSiteImages()
   const { content } = useSiteContent()
   
-  // Fixed the syntax error here by joining the fallback emails with commas
-  const email = content.contact_email || 'bkozlenko@brewsterschools.org, dschneider@brewsterschools.org, jzhinin@brewsterschools.org'
+  // 1. Get the email string from content, or use the comma-separated backup list
+  const emailSource = content.contact_email || 'bkozlenko@brewsterschools.org, dschneider@brewsterschools.org, jzhinin@brewsterschools.org'
+  
+  // 2. Split the string by commas and clean up any accidental spaces
+  const emailList = emailSource.split(',').map(email => email.trim())
+  
   const year = new Date().getFullYear()
 
   return (
@@ -55,11 +59,21 @@ export default function Footer() {
               Brewster, NY 10509
             </span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-            <Mail size={16} className="shrink-0" />
-            <a href={`mailto:${email}`} className="hover:text-[var(--accent)] transition-colors break-all">
-              {email}
-            </a>
+          
+          {/* 3. Loop through the emails and render each one on its own line */}
+          <div className="flex items-start gap-2 text-sm text-[var(--text-muted)]">
+            <Mail size={16} className="mt-0.5 shrink-0" />
+            <div className="flex flex-col gap-1">
+              {emailList.map((email, index) => (
+                <a 
+                  key={index} 
+                  href={`mailto:${email}`} 
+                  className="hover:text-[var(--accent)] transition-colors break-all"
+                >
+                  {email}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
