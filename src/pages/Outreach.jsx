@@ -9,22 +9,22 @@ import { useSiteContent, useSiteImages } from '../lib/data'
 // Defined the missing ACTIVITIES array so the map function doesn't crash the page!
 const ACTIVITIES = [
   {
-    title: 'STEM Mentorship',
+    title: 'Workshops',
     icon: Star,
     key: 'outreach_stem_mentorship',
-    fallback: 'We volunteer at the middle school and elementary schools to mentor younger students in FIRST LEGO League and basic robotics.'
+    fallback: 'At our local middle school, Henry H. Wells Middle Schools, we volunteer to mentor their robotics club by helping them build LEGO Mindstorms with a battle of bots esque competion at the end of the year.'
   },
   {
     title: 'Community Demos',
     icon: Users,
     key: 'outreach_community_demos',
-    fallback: "You can find us at local town events, fairs, and farmer's markets showing off our robot and advocating for STEM education."
+    fallback: "Currently we do demos every year at our local intermediate school, which is grades 3 to 5, at their Annual STEAM Fair."
   },
   {
-    title: 'Giving Back',
+    title: ' Team Mentorship',
     icon: Heart,
     key: 'outreach_giving_back',
-    fallback: 'Beyond engineering, we partner with local Brewster organizations to support community initiatives and volunteer our time where it is needed most.'
+    fallback: 'Experienced members and mentors share their knowledge, guiding new members through every aspect of robot design and competition.'
   }
 ]
 
