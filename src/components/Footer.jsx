@@ -20,7 +20,10 @@ const NAV_COL_2 = [
 export default function Footer() {
   const { images } = useSiteImages()
   const { content } = useSiteContent()
-  const email = content.contact_email || 'bkozlenko@brewsterschools.org, dschneider@brewsterschools.org, jzhinin@brewsterschools.org'  const year = new Date().getFullYear()
+  
+  // Fixed the syntax error here by joining the fallback emails with commas
+  const email = content.contact_email || 'bkozlenko@brewsterschools.org, dschneider@brewsterschools.org, jzhinin@brewsterschools.org'
+  const year = new Date().getFullYear()
 
   return (
     <footer className="border-t mt-auto" style={{ borderColor: 'var(--border)', background: 'var(--nav-bg)' }}>
@@ -54,7 +57,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
             <Mail size={16} className="shrink-0" />
-            <a href={`mailto:${email}`} className="hover:text-[var(--accent)] transition-colors">
+            <a href={`mailto:${email}`} className="hover:text-[var(--accent)] transition-colors break-all">
               {email}
             </a>
           </div>
