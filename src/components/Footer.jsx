@@ -20,8 +20,7 @@ const NAV_COL_2 = [
 export default function Footer() {
   const { images } = useSiteImages()
   const { content } = useSiteContent()
-  const email = content.contact_email || 'team@cybearbots.org'
-  const year = new Date().getFullYear()
+  const email = content.contact_email || 'bkozlenko@brewsterschools.org, dschneider@brewsterschools.org, jzhinin@brewsterschools.org'  const year = new Date().getFullYear()
 
   return (
     <footer className="border-t mt-auto" style={{ borderColor: 'var(--border)', background: 'var(--nav-bg)' }}>
