@@ -7,13 +7,13 @@ import ScrollReveal from '../components/ScrollReveal'
 import { useSiteContent, useSiteImages } from '../lib/data'
 
 // Defined these so the page doesn't crash!
-const FOUNDERS = ['Student 1', 'Student 2', 'Mentor Name'] 
+const FOUNDERS = ['Brenden Fox', 'Edward Kaufman', 'Anthony Ayala', 'Akshay Gupta', 'Lauren Knorr'] 
 
 const VALUES = [
-  { title: 'Gracious Professionalism', body: 'We compete like crazy, but treat one another with respect and kindness in the process.', icon: Heart },
-  { title: 'Innovation', body: 'We push the boundaries of what we know, constantly iterating and improving our designs.', icon: Star },
-  { title: 'Community Impact', body: 'We strive to make STEM accessible to everyone in the Brewster community.', icon: Users },
-  { title: 'Hard Engineering', body: 'We use professional CAD, wiring, and programming tools to solve complex problems.', icon: Wrench },
+  { title: 'Gracious Professionalism', body: 'A core FIRST value, we compete fiercely and assist our fellow teams with equal enthusiasm. Excellence and integrity are not opposites.', icon: handshake },
+  { title: 'Community', body: 'Robotics does not happen in a vacuum. We are rooted in Brewster, NY, and committed to giving back through outreach, mentorship, and collaboration.', icon: Heart },
+  { title: 'Teamwork', body: 'We believe that the best solutions come from diverse teams working together with trust, respect, and shared purpose.', icon: Users },
+  { title: 'Hand-on STEM', body: 'Real engineering, real code, real business decisions — every member learns by doing, not by watching.', icon: Wrench },
 ]
 
 export default function OurStory() {
