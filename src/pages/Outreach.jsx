@@ -3,10 +3,30 @@ import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import ImageUpload from '../components/ImageUpload'
 import EditableText from '../components/EditableText'
-import ScrollReveal from '../components/ScrollReveal' // Added import
+import ScrollReveal from '../components/ScrollReveal'
 import { useSiteContent, useSiteImages } from '../lib/data'
 
-// ... (ACTIVITIES constant remains unchanged) ...
+// Defined the missing ACTIVITIES array so the map function doesn't crash the page!
+const ACTIVITIES = [
+  {
+    title: 'STEM Mentorship',
+    icon: Star,
+    key: 'outreach_stem_mentorship',
+    fallback: 'We volunteer at the middle school and elementary schools to mentor younger students in FIRST LEGO League and basic robotics.'
+  },
+  {
+    title: 'Community Demos',
+    icon: Users,
+    key: 'outreach_community_demos',
+    fallback: "You can find us at local town events, fairs, and farmer's markets showing off our robot and advocating for STEM education."
+  },
+  {
+    title: 'Giving Back',
+    icon: Heart,
+    key: 'outreach_giving_back',
+    fallback: 'Beyond engineering, we partner with local Brewster organizations to support community initiatives and volunteer our time where it is needed most.'
+  }
+]
 
 export default function Outreach() {
   const { content, setValue } = useSiteContent()
