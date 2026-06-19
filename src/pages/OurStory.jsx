@@ -3,16 +3,26 @@ import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import ImageUpload from '../components/ImageUpload'
 import EditableText from '../components/EditableText'
-import ScrollReveal from '../components/ScrollReveal' // Added import
+import ScrollReveal from '../components/ScrollReveal'
 import { useSiteContent, useSiteImages } from '../lib/data'
 
-// ... (FOUNDERS and VALUES constants remain unchanged) ...
+// Defined these so the page doesn't crash!
+const FOUNDERS = ['Student 1', 'Student 2', 'Mentor Name'] 
+
+const VALUES = [
+  { title: 'Gracious Professionalism', body: 'We compete like crazy, but treat one another with respect and kindness in the process.', icon: Heart },
+  { title: 'Innovation', body: 'We push the boundaries of what we know, constantly iterating and improving our designs.', icon: Star },
+  { title: 'Community Impact', body: 'We strive to make STEM accessible to everyone in the Brewster community.', icon: Users },
+  { title: 'Hard Engineering', body: 'We use professional CAD, wiring, and programming tools to solve complex problems.', icon: Wrench },
+]
 
 export default function OurStory() {
   const { content, setValue } = useSiteContent()
   const { images, setImage } = useSiteImages()
 
-  // ... (foundingBody and whatWeDoBody variables remain unchanged) ...
+  // Safely grab database content or use default text
+  const foundingBody = content.our_story_founding_body || 'CyBearBots was founded in September 2018 to bring hands-on engineering to Brewster students.'
+  const whatWeDoBody = content.our_story_what_we_do_body || 'During the build season, we work alongside mentors to design, build, and program a 120-pound robot from scratch.'
 
   return (
     <div>
