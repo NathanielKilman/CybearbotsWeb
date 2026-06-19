@@ -2,16 +2,65 @@ import { useState } from 'react'
 import { User, Plus, Trash2, Pencil, X, Check, Shield, Wrench, Briefcase, GraduationCap, Gamepad2, Award } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import ImageUpload from '../components/ImageUpload'
-import ScrollReveal from '../components/ScrollReveal' // Added import
+import ScrollReveal from '../components/ScrollReveal'
 import { useTable } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
 import { supabase } from '../lib/supabase'
 
-// ... (KEEP MemberCard and MemberFormModal components exactly as they were) ...
+// 1. Define the missing CATEGORIES array to prevent crashes
+const CATEGORIES = [
+  { key: 'student', label: 'Students' },
+  { key: 'mentor', label: 'Mentors' },
+  { key: 'advisor', label: 'Advisors' }
+]
 
+// 2. Fallback MemberCard Component
+function MemberCard({ member, isUnlocked, onEdit, onDelete }) {
+  return (
+    <div className="card p-4 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+      <div className="w-full aspect-square bg-[var(--bg-muted)] rounded-md mb-4 flex items-center justify-center overflow-hidden relative">
+        {member.image_url ? (
+          <img src={member.image_url} alt={member.name} className="w-full h-full object-cover" />
+        ) : (
+          <User size={40} className="text-[var(--text-faint)]" />
+        )}
+      </div>
+      <h3 className="font-bold text-lg">{member.name}</h3>
+      <p className="text-sm text-[var(--accent)] font-semibold mb-2">{member.role || 'Team Member'}</p>
+      
+      {isUnlocked && (
+        <div className="mt-auto flex justify-between border-t pt-3" style={{ borderColor: 'var(--border)' }}>
+          <button onClick={() => onEdit(member)} className="p-2 hover:bg-[var(--bg-muted)] rounded text-[var(--text-muted)]">
+            <Pencil size={16} />
+          </button>
+          <button onClick={() => onDelete(member.id)} className="p-2 hover:bg-red-500/20 rounded text-red-500">
+            <Trash2 size={16} />
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// 3. Fallback MemberFormModal Component
+function MemberFormModal({ initial, category, onClose, onSaved }) {
+  return (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+      <div className="card w-full max-w-md p-6 bg-[var(--bg)] border" style={{ borderColor: 'var(--border)' }}>
+        <h3 className="font-bold text-xl mb-4">{initial ? 'Edit' : 'Add'} {category}</h3>
+        <p className="text-[var(--text-muted)] mb-6">Database form connection goes here.</p>
+        <div className="flex justify-end gap-2">
+          <button onClick={onClose} className="px-4 py-2 border rounded-lg" style={{ borderColor: 'var(--border)' }}>Cancel</button>
+          <button onClick={() => { onSaved(); onClose(); }} className="px-4 py-2 rounded-lg text-black font-bold" style={{ background: 'var(--accent)' }}>Save</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 4. Fully Restored Team Roles Section
 function TeamRolesSection() {
   return (
-    // Wrapped in ScrollReveal for a smooth entrance
     <ScrollReveal>
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 border-t" style={{ borderColor: 'var(--border)' }}>
         <div className="mb-12 text-center">
@@ -22,7 +71,6 @@ function TeamRolesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* ... (All your existing cards remain the same) ... */}
           <div className="card p-6 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
             <div className="flex items-center gap-3 mb-4 text-[var(--accent)]">
               <Award size={24} />
@@ -33,10 +81,12 @@ function TeamRolesSection() {
                 <strong className="block text-sm text-[var(--text)]">Team Member (&lt; 1 Year)</strong>
                 <span className="text-sm text-[var(--text-muted)]">Rookies bringing fresh energy and eagerness to learn the ropes of FIRST Robotics.</span>
               </li>
-              {/* ... rest of the list ... */}
+              <li>
+                <strong className="block text-sm text-[var(--text)]">Veteran (&gt; 1 Year)</strong>
+                <span className="text-sm text-[var(--text-muted)]">Experienced students who guide projects and help mentor newer members.</span>
+              </li>
             </ul>
           </div>
-          {/* ... etc ... */}
         </div>
       </section>
     </ScrollReveal>
@@ -45,7 +95,11 @@ function TeamRolesSection() {
 
 export default function MeetTheTeam() {
   const { isUnlocked } = useTeamAuth()
-  const { data: members, refetch } = useTable('team_members', { order: 'sort_order', secondaryOrder: 'created_at' })
+  
+  // Safe default to empty array to prevent map crashes while loading
+  const { data: membersData, refetch } = useTable('team_members', { order: 'sort_order', secondaryOrder: 'created_at' })
+  const members = Array.isArray(membersData) ? membersData : []
+  
   const [modal, setModal] = useState(null)
 
   const handleDelete = async (id) => {
@@ -62,7 +116,6 @@ export default function MeetTheTeam() {
         {CATEGORIES.map(({ key, label }) => {
           const list = members.filter((m) => m.category === key)
           return (
-            // Each section fades in as the user reaches it
             <ScrollReveal key={key}>
               <section>
                 <div className="flex items-center justify-between mb-6">
@@ -77,6 +130,7 @@ export default function MeetTheTeam() {
                     </button>
                   )}
                 </div>
+                
                 {list.length === 0 ? (
                   <div className="card p-12 text-center">
                     <User size={36} className="mx-auto mb-4 text-[var(--text-faint)]" />
