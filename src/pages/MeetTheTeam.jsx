@@ -325,7 +325,7 @@ function TeamRolesSection() {
             <ul className="space-y-4 flex-1">
               <li>
                 <strong className="block text-sm text-[var(--text)]">Advisors</strong>
-                <span className="text-sm text-[var(--text-muted)]">Dedicated teachers from our school district who oversee the entire club. They are the foundational pillars of our team—without them, CyBearBots simply would not exist.</span>
+                <span className="text-sm text-[var(--text-muted)]">Dedicated teachers from our school district who oversee the entire club. They are the foundational pillars of our team, without them, CyBearBots simply would not exist.</span>
               </li>
               <li>
                 <strong className="block text-sm text-[var(--text)]">Mentors</strong>
