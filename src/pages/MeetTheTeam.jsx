@@ -1,40 +1,122 @@
-import { useState } from 'react'
-import { User, Plus, Trash2, Pencil, X, Check, Shield, Wrench, Briefcase, GraduationCap, Gamepad2, Award } from 'lucide-react'
-import PageHero from '../components/PageHero'
-import ImageUpload from '../components/ImageUpload'
-import ScrollReveal from '../components/ScrollReveal'
-import { useTable } from '../lib/data'
-import { useTeamAuth } from '../context/TeamAuthContext'
-import { supabase } from '../lib/supabase'
-
-// 1. Define the missing CATEGORIES array to prevent crashes
-const CATEGORIES = [
-  { key: 'student', label: 'Students' },
-  { key: 'mentor', label: 'Mentors' },
-  { key: 'advisor', label: 'Advisors' }
-]
-
-// 2. Fallback MemberCard Component
-function MemberCard({ member, isUnlocked, onEdit, onDelete }) {
+function TeamRolesSection() {
   return (
-    <div className="card p-4 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
-      <div className="w-full aspect-square bg-[var(--bg-muted)] rounded-md mb-4 flex items-center justify-center overflow-hidden relative">
-        {member.image_url ? (
-          <img src={member.image_url} alt={member.name} className="w-full h-full object-cover" />
-        ) : (
-          <User size={40} className="text-[var(--text-faint)]" />
-        )}
+    <section className="max-w-7xl mx-auto px-4 lg:px-6 py-16 border-t" style={{ borderColor: 'var(--border)' }}>
+      <div className="mb-12 text-center">
+        <h2 className="font-display font-extrabold text-3xl sm:text-4xl mb-4">Team Structure & Roles</h2>
+        <p className="text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
+          CyBearBots operates like a real-world engineering firm. Every member has a vital role to play, from hands-on fabrication to business management and on-field strategy.
+        </p>
       </div>
-      <h3 className="font-bold text-lg">{member.name}</h3>
-      <p className="text-sm text-[var(--accent)] font-semibold mb-2">{member.role || 'Team Member'}</p>
-      
-      {isUnlocked && (
-        <div className="mt-auto flex justify-between border-t pt-3" style={{ borderColor: 'var(--border)' }}>
-          <button onClick={() => onEdit(member)} className="p-2 hover:bg-[var(--bg-muted)] rounded text-[var(--text-muted)]">
-            <Pencil size={16} />
-          </button>
-          <button onClick={() => onDelete(member.id)} className="p-2 hover:bg-red-500/20 rounded text-red-500">
-            <Trash2 size={16} />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="card p-6 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-3 mb-4 text-[var(--accent)]">
+            <Award size={24} />
+            <h3 className="font-display font-bold text-xl text-[var(--text)]">Experience Levels</h3>
+          </div>
+          <ul className="space-y-4 flex-1">
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Team Member (&lt; 1 Year)</strong>
+              <span className="text-sm text-[var(--text-muted)]">Rookies bringing fresh energy and eagerness to learn the ropes of FIRST Robotics.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Junior Member (2 Years)</strong>
+              <span className="text-sm text-[var(--text-muted)]">Experienced students who have found their footing and take on complex projects.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Senior Member (3+ Years)</strong>
+              <span className="text-sm text-[var(--text-muted)]">Core veterans who act as role models, leading subteams and guiding newer members.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="card p-6 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-3 mb-4 text-[var(--accent)]">
+            <Wrench size={24} />
+            <h3 className="font-display font-bold text-xl text-[var(--text)]">Technical Leadership</h3>
+          </div>
+          <ul className="space-y-4 flex-1">
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Mechanical Captain</strong>
+              <span className="text-sm text-[var(--text-muted)]">The mastermind overseeing all physical robot fabrication, electrical wiring, and hardware integration.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Lead CAD Designer</strong>
+              <span className="text-sm text-[var(--text-muted)]">The digital architect responsible for all 3D modeling and prototyping before physical building begins.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Coding Captain</strong>
+              <span className="text-sm text-[var(--text-muted)]">Leads the software team to program autonomous routines, vision systems, and tele-operated controls.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="card p-6 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-3 mb-4 text-[var(--accent)]">
+            <Briefcase size={24} />
+            <h3 className="font-display font-bold text-xl text-[var(--text)]">Business Leadership</h3>
+          </div>
+          <ul className="space-y-4 flex-1">
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Business Marketing Lead</strong>
+              <span className="text-sm text-[var(--text-muted)]">Co-leader of the Business team. Tackles overall business operations but specializes in team branding, marketing strategy, and public image.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Business Relation Lead</strong>
+              <span className="text-sm text-[var(--text-muted)]">Co-leader of the Business team. Focuses heavily on community outreach, securing essential sponsorships, and fostering relationships with other teams.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Safety Captain</strong>
+              <span className="text-sm text-[var(--text-muted)]">The ultimate protector of the workspace, ensuring strict safety protocols are followed in the shop and at events.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="card p-6 flex flex-col h-full bg-[var(--bg-elevated)] border lg:col-span-2" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-3 mb-4 text-[var(--accent)]">
+            <Gamepad2 size={24} />
+            <h3 className="font-display font-bold text-xl text-[var(--text)]">The Drive Team</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+            <div>
+              <strong className="block text-sm text-[var(--text)]">Drive Coach</strong>
+              <span className="text-sm text-[var(--text-muted)]">A leader. They head the Strategy & Scouting teams. During actually matches, they act as the match captain, directing real-time strategy behind the glass.</span>
+            </div>
+            <div>
+              <strong className="block text-sm text-[var(--text)]">Lead Driver</strong>
+              <span className="text-sm text-[var(--text-muted)]">The pilot controlling the robot's movement and chassis during the competition.</span>
+            </div>
+            <div>
+              <strong className="block text-sm text-[var(--text)]">Lead Operator</strong>
+              <span className="text-sm text-[var(--text-muted)]">The systems expert managing all non-driving mechanisms (shooters, intakes, climbers) based on the season's game rules.</span>
+            </div>
+            <div>
+              <strong className="block text-sm text-[var(--text)]">Human Player</strong>
+              <span className="text-sm text-[var(--text-muted)]">The crucial human element who physically interacts with game pieces from behind the alliance wall to assist the robot.</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-6 flex flex-col h-full bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-3 mb-4 text-[var(--accent)]">
+            <GraduationCap size={24} />
+            <h3 className="font-display font-bold text-xl text-[var(--text)]">Adult Leadership</h3>
+          </div>
+          <ul className="space-y-4 flex-1">
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Advisors</strong>
+              <span className="text-sm text-[var(--text-muted)]">Dedicated teachers from our school district who oversee the entire club. They are the foundational pillars of our team, without them, CyBearBots simply would not exist.</span>
+            </li>
+            <li>
+              <strong className="block text-sm text-[var(--text)]">Mentors</strong>
+              <span className="text-sm text-[var(--text-muted)]">Generous industry professionals and community volunteers who donate their time and expertise to guide our students through complex challenges.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  )
+}            <Trash2 size={16} />
           </button>
         </div>
       )}
