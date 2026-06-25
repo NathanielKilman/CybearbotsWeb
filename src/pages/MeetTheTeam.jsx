@@ -236,11 +236,11 @@ function TeamRolesSection() {
                 <span className="text-sm text-[var(--text-muted)]">Rookies bringing fresh energy and eagerness to learn the ropes of FIRST Robotics.</span>
               </li>
               <li>
-                <strong className="block text-sm text-[var(--text)]">Junior Member (2 Years)</strong>
+                <strong className="block text-sm text-[var(--text)]">Junior Member (Starting 2nd Year)</strong>
                 <span className="text-sm text-[var(--text-muted)]">Experienced students who have found their footing and take on complex projects.</span>
               </li>
               <li>
-                <strong className="block text-sm text-[var(--text)]">Senior Member (3+ Years)</strong>
+                <strong className="block text-sm text-[var(--text)]">Senior Member (Starting 3rd Year or more)</strong>
                 <span className="text-sm text-[var(--text-muted)]">Core veterans who act as role models, leading subteams and guiding newer members.</span>
               </li>
             </ul>
