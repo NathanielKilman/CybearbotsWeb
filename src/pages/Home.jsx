@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, Trophy, Newspaper, Users, ArrowRight, FileText, Plus, Trash2, ExternalLink } from 'lucide-react'
 import { useSiteContent, useSiteImages, useTable } from '../lib/data'
@@ -18,9 +18,60 @@ const QUICK_LINKS = [
 export default function Home() {
   const { content, setValue } = useSiteContent()
   const { images, setImage } = useSiteImages()
+  const { user } = useTeamAuth() 
   
   const { data: newsData } = useTable('news_posts', { order: 'post_date', ascending: false })
   const news = Array.isArray(newsData) ? newsData : []
+
+  // --- Public Resources State ---
+  const [resources, setResources] = useState([])
+  const [newTitle, setNewTitle] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
+  // Fetch from your existing 'public_resources' table
+  useEffect(() => {
+    async function fetchResources() {
+      const { data, error } = await supabase
+        .from('public_resources')
+        .select('*')
+        // Using 'id' as an alternative sorting fallback if 'created_at' isn't explicitly defined
+        .order('id', { ascending: true }) 
+      
+      if (!error && data) setResources(data)
+    }
+    fetchResources()
+  }, [])
+
+  // Handle adding a new resource link
+  const handleAddResource = async (e) => {
+    e.preventDefault()
+    if (!newTitle || !newUrl) return
+
+    const formattedUrl = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`
+
+    const { data, error } = await supabase
+      .from('public_resources')
+      .insert([{ title: newTitle, url: formattedUrl }])
+      .select()
+
+    if (!error && data) {
+      setResources([...resources, data[0]])
+      setNewTitle('')
+      setNewUrl('')
+    }
+  }
+
+  // Handle deleting a resource link
+  const handleDeleteResource = async (id) => {
+    const { error } = await supabase
+      .from('public_resources')
+      .delete()
+      .eq('id', id)
+
+    if (!error) {
+      setResources(resources.filter(item => item.id !== id))
+    }
+  }
 
   const mission =
     content.mission_statement ||
@@ -77,55 +128,4 @@ export default function Home() {
                   to={link.to}
                   className="card p-6 flex flex-col justify-between hover:border-[var(--accent)] transition-colors group"
                 >
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: `${link.color}15` }}>
-                    <Icon size={20} style={{ color: link.color }} />
-                  </div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold tracking-tight">{link.label}</span>
-                    <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform text-[var(--text-muted)]" />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* RECENT NEWS / UPDATES */}
-      <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-t" style={{ borderColor: 'var(--border)' }}>
-        <ScrollReveal>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="font-display font-bold text-2xl lg:text-3xl">Latest Team Updates</h2>
-            <Link to="/news" className="label-mono text-sm flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
-              VIEW ALL <ExternalLink size={14} />
-            </Link>
-          </div>
-        </ScrollReveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {news.slice(0, 3).map((post) => (
-            <ScrollReveal key={post.id}>
-              <div className="card p-6 flex flex-col justify-between h-full">
-                <div>
-                  <p className="label-mono text-xs text-[var(--text-faint)] mb-2">
-                    {new Date(post.post_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </p>
-                  <h3 className="font-bold text-xl mb-2 line-clamp-2">{post.title}</h3>
-                  <p className="text-[var(--text-muted)] text-sm line-clamp-3 mb-4">{post.summary || post.body}</p>
-                </div>
-                <Link to={`/news/${post.id}`} className="text-sm font-semibold flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
-                  Read story <ArrowRight size={14} />
-                </Link>
-              </div>
-            </ScrollReveal>
-          ))}
-          {news.length === 0 && (
-            <div className="col-span-full card p-8 text-center border-dashed" style={{ borderColor: 'var(--border-strong)' }}>
-              <p className="text-[var(--text-muted)]">No recent news posts found. Check back soon!</p>
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  )
-}
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb
