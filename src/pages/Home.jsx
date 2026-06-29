@@ -34,7 +34,6 @@ export default function Home() {
       const { data, error } = await supabase
         .from('public_resources')
         .select('*')
-        // Using 'id' as an alternative sorting fallback if 'created_at' isn't explicitly defined
         .order('id', { ascending: true }) 
       
       if (!error && data) setResources(data)
@@ -128,4 +127,139 @@ export default function Home() {
                   to={link.to}
                   className="card p-6 flex flex-col justify-between hover:border-[var(--accent)] transition-colors group"
                 >
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" 
+                    style={{ background: link.color + '15' }}
+                  >
+                    <Icon size={20} style={{ color: link.color }} />
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-bold tracking-tight">{link.label}</span>
+                    <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform text-[var(--text-muted)]" />
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* TEAM RESOURCES SECTION */}
+      <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-t" style={{ borderColor: 'var(--border)' }}>
+        <ScrollReveal>
+          <div className="mb-6">
+            <h2 className="font-display font-bold text-2xl lg:text-3xl mb-2 text-left">Team Resources</h2>
+            <p className="text-sm text-[var(--text-muted)] text-left">Useful document templates, drives, and tools for internal team operations.</p>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            {resources.map((item) => (
+              <div 
+                key={item.id} 
+                className="card p-4 flex items-center justify-between gap-4 group hover:border-[var(--accent)] transition-colors"
+              >
+                <a 
+                  href={item.url} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="flex items-center gap-3 font-semibold text-sm hover:text-[var(--accent)] transition-colors grow text-left"
+                >
+                  <div className="w-8 h-8 rounded bg-[var(--border)] flex items-center justify-center shrink-0">
+                    <FileText size={16} className="text-[var(--text-muted)]" />
+                  </div>
+                  <span className="truncate">{item.title}</span>
+                  <ExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-[var(--text-faint)]" />
+                </a>
+
+                {user && (
+                  <button 
+                    onClick={() => handleDeleteResource(item.id)}
+                    className="p-1.5 rounded text-[var(--text-faint)] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                    title="Delete link"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                )}
+              </div>
+            ))}
+
+            {resources.length === 0 && !user && (
+              <p className="text-sm text-[var(--text-faint)] italic col-span-full py-4 text-left">No resources shared yet.</p>
+            )}
+          </div>
+
+          {user && (
+            <form onSubmit={handleAddResource} className="card p-4 bg-[var(--nav-bg)] border-dashed max-w-xl flex flex-col sm:flex-row gap-3 items-end">
+              <div className="w-full text-left">
+                <label className="block label-mono text-[10px] text-[var(--text-muted)] mb-1">RESOURCE NAME</label>
+                <input 
+                  type="text"
+                  placeholder="e.g., Coding Standards"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  className="w-full text-sm p-2 rounded border bg-[var(--bg)]"
+                  style={{ borderColor: 'var(--border)' }}
+                />
+              </div>
+              <div className="w-full text-left">
+                <label className="block label-mono text-[10px] text-[var(--text-muted)] mb-1">TARGET URL</label>
+                <input 
+                  type="text"
+                  placeholder="drive.google.com/..."
+                  value={newUrl}
+                  onChange={(e) => setNewUrl(e.target.value)}
+                  className="w-full text-sm p-2 rounded border bg-[var(--bg)]"
+                  style={{ borderColor: 'var(--border)' }}
+                />
+              </div>
+              <button 
+                type="submit"
+                className="w-full sm:w-auto px-4 py-2 bg-[var(--accent)] text-white rounded text-sm font-semibold flex items-center justify-center gap-1 shrink-0 h-[38px]"
+              >
+                <Plus size={16} /> Add
+              </button>
+            </form>
+          )}
+        </ScrollReveal>
+      </section>
+
+      {/* RECENT NEWS / UPDATES */}
+      <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-t" style={{ borderColor: 'var(--border)' }}>
+        <ScrollReveal>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-display font-bold text-2xl lg:text-3xl">Latest Team Updates</h2>
+            <Link to="/news" className="label-mono text-sm flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
+              VIEW ALL <ExternalLink size={14} />
+            </Link>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {news.slice(0, 3).map((post) => (
+            <ScrollReveal key={post.id}>
+              <div className="card p-6 flex flex-col justify-between h-full">
+                <div>
+                  <p className="label-mono text-xs text-[var(--text-faint)] mb-2">
+                    {new Date(post.post_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </p>
+                  <h3 className="font-bold text-xl mb-2 line-clamp-2">{post.title}</h3>
+                  <p className="text-[var(--text-muted)] text-sm line-clamp-3 mb-4">{post.summary || post.body}</p>
+                </div>
+                <Link to={`/news/${post.id}`} className="text-sm font-semibold flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
+                  Read story <ArrowRight size={14} />
+                </Link>
+              </div>
+            </ScrollReveal>
+          ))}
+          {news.length === 0 && (
+            <div className="col-span-full card p-8 text-center border-dashed" style={{ borderColor: 'var(--border-strong)' }}>
+              <p className="text-[var(--text-muted)]">No recent news posts found. Check back soon!</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  )
+}
