@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Lock, Plus, Trash2, X, Check, GripVertical, Settings } from 'lucide-react'
+import { Lock, Plus, Trash2, X, Check, GripVertical, Settings, Mail } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import ScrollReveal from '../components/ScrollReveal' // Added import
 import { useTable, useSiteContent } from '../lib/data'
@@ -288,13 +288,24 @@ function TaskBoard() {
             <p className="label-mono mb-1" style={{ color: 'var(--accent)' }}>BUILD SEASON</p>
             <h1 className="font-display font-extrabold text-3xl lg:text-4xl">Task Board</h1>
           </div>
-          <button
-            onClick={lock}
-            className="label-mono px-4 py-2 rounded-lg border flex items-center gap-2"
-            style={{ borderColor: 'var(--border)' }}
-          >
-            <Lock size={14} /> LOCK
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://cbmail.cybearbots.org"
+              target="_blank"
+              rel="noopener"
+              className="label-mono px-4 py-2 rounded-lg border flex items-center gap-2"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <Mail size={14} /> TEAM MAIL
+            </a>
+            <button
+              onClick={lock}
+              className="label-mono px-4 py-2 rounded-lg border flex items-center gap-2"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <Lock size={14} /> LOCK
+            </button>
+          </div>
         </div>
       </ScrollReveal>
 
