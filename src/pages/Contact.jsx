@@ -43,7 +43,7 @@ export default function Contact() {
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return
 
     setStatus('sending')
-    const { error } = await supabase.from('contact_inquiries').insert(form)
+    const { error } = await supabase.from('contact_messages').insert(form)
     
     if (error) {
       setStatus('error')
