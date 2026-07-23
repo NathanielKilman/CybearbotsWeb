@@ -90,7 +90,8 @@ export default function Contact() {
                 <div className="text-sm font-semibold text-[var(--text)] leading-relaxed">
                   <a href="mailto:bkozlenko@brewsterschools.org" className="hover:underline block">bkozlenko@brewsterschools.org</a>
                   <a href="mailto:dschneider@brewsterschools.org" className="hover:underline block">dschneider@brewsterschools.org</a>
-                  <a href="mailto:jzhinin@brewsterschools.org" className="hover:underline block">jzhinin@brewsterschools.org</a>
+                  <a href="mailto:jzhinin@brewsterschools.org" className="hover:underline block">dschneider@brewsterschools.org</a>
+                  <a href="mailto:business@cybearbots.org" className="hover:underline block">business@cybearbots.org</a>
                 </div>
               </div>
             </div>
