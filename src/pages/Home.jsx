@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, Trophy, Newspaper, Users, ArrowRight, FileText, Plus, Trash2, ExternalLink } from 'lucide-react'
+import { Heart, Trophy, Newspaper, Users, ArrowRight, ExternalLink } from 'lucide-react'
 import { useSiteContent, useSiteImages, useTable } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
 import { supabase } from '../lib/supabase'
 import ImageUpload from '../components/ImageUpload'
 import EditableText from '../components/EditableText'
 import ScrollReveal from '../components/ScrollReveal'
+import Countdown from '../components/Countdown'
 
 const QUICK_LINKS = [
   { to: '/sponsors', label: 'Sponsors', icon: Heart, color: '#3ba271' },
@@ -18,63 +19,21 @@ const QUICK_LINKS = [
 export default function Home() {
   const { content, setValue } = useSiteContent()
   const { images, setImage } = useSiteImages()
-  const { user } = useTeamAuth() 
   
   const { data: newsData } = useTable('news_posts', { order: 'post_date', ascending: false })
   const news = Array.isArray(newsData) ? newsData : []
 
-  // --- Public Resources State ---
-  const [resources, setResources] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-
-  // Fetch from your existing 'public_resources' table
-  useEffect(() => {
-    async function fetchResources() {
-      const { data, error } = await supabase
-        .from('public_resources')
-        .select('*')
-        .order('id', { ascending: true }) 
-      
-      if (!error && data) setResources(data)
-    }
-    fetchResources()
-  }, [])
-
-  // Handle adding a new resource link
-  const handleAddResource = async (e) => {
-    e.preventDefault()
-    if (!newTitle || !newUrl) return
-
-    const formattedUrl = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`
-
-    const { data, error } = await supabase
-      .from('public_resources')
-      .insert([{ title: newTitle, url: formattedUrl }])
-      .select()
-
-    if (!error && data) {
-      setResources([...resources, data[0]])
-      setNewTitle('')
-      setNewUrl('')
-    }
-  }
-
-  // Handle deleting a resource link
-  const handleDeleteResource = async (id) => {
-    const { error } = await supabase
-      .from('public_resources')
-      .delete()
-      .eq('id', id)
-
-    if (!error) {
-      setResources(resources.filter(item => item.id !== id))
-    }
-  }
-
   const mission =
     content.mission_statement ||
     'The mission of CyBearBots is to move past the traditional classroom to include more students, encourage community collaboration with mentors, and immerse ourselves in STEM through our involvement with FIRST.'
+
+  // Countdown settings (stored in site_content)
+  const countdownVisible = content.countdown_visible !== false && content.countdown_visible !== 'false'
+  const countdownDate = content.countdown_target_date || ''
+  const countdownLabel = content.countdown_label || ''
+  const countdownEndMessage = content.countdown_end_message || ''
+  const countdownEndLinkText = content.countdown_end_link_text || ''
+  const countdownEndLinkUrl = content.countdown_end_link_url || ''
 
   return (
     <div>
@@ -115,6 +74,17 @@ export default function Home() {
         </div>
       </section>
 
+      {/* COUNTDOWN */}
+      <Countdown
+        targetDate={countdownDate}
+        label={countdownLabel}
+        endMessage={countdownEndMessage}
+        endLinkText={countdownEndLinkText}
+        endLinkUrl={countdownEndLinkUrl}
+        onSave={setValue}
+        visible={countdownVisible}
+      />
+
       {/* QUICK LINKS SECTION */}
       <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12">
         <ScrollReveal>
@@ -127,10 +97,7 @@ export default function Home() {
                   to={link.to}
                   className="card p-6 flex flex-col justify-between hover:border-[var(--accent)] transition-colors group"
                 >
-                  <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" 
-                    style={{ background: link.color + '15' }}
-                  >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: `${link.color}15` }}>
                     <Icon size={20} style={{ color: link.color }} />
                   </div>
                   <div className="flex items-center justify-between gap-2">
@@ -141,87 +108,6 @@ export default function Home() {
               )
             })}
           </div>
-        </ScrollReveal>
-      </section>
-
-      {/* TEAM RESOURCES SECTION */}
-      <section className="max-w-7xl mx-auto px-4 lg:px-6 py-12 border-t" style={{ borderColor: 'var(--border)' }}>
-        <ScrollReveal>
-          <div className="mb-6">
-            <h2 className="font-display font-bold text-2xl lg:text-3xl mb-2 text-left">Team Resources</h2>
-            <p className="text-sm text-[var(--text-muted)] text-left">Useful document templates, drives, and tools for internal team operations.</p>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            {resources.map((item) => (
-              <div 
-                key={item.id} 
-                className="card p-4 flex items-center justify-between gap-4 group hover:border-[var(--accent)] transition-colors"
-              >
-                <a 
-                  href={item.url} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="flex items-center gap-3 font-semibold text-sm hover:text-[var(--accent)] transition-colors grow text-left"
-                >
-                  <div className="w-8 h-8 rounded bg-[var(--border)] flex items-center justify-center shrink-0">
-                    <FileText size={16} className="text-[var(--text-muted)]" />
-                  </div>
-                  <span className="truncate">{item.title}</span>
-                  <ExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-[var(--text-faint)]" />
-                </a>
-
-                {user && (
-                  <button 
-                    onClick={() => handleDeleteResource(item.id)}
-                    className="p-1.5 rounded text-[var(--text-faint)] hover:text-red-500 hover:bg-red-500/10 transition-colors"
-                    title="Delete link"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                )}
-              </div>
-            ))}
-
-            {resources.length === 0 && !user && (
-              <p className="text-sm text-[var(--text-faint)] italic col-span-full py-4 text-left">No resources shared yet.</p>
-            )}
-          </div>
-
-          {user && (
-            <form onSubmit={handleAddResource} className="card p-4 bg-[var(--nav-bg)] border-dashed max-w-xl flex flex-col sm:flex-row gap-3 items-end">
-              <div className="w-full text-left">
-                <label className="block label-mono text-[10px] text-[var(--text-muted)] mb-1">RESOURCE NAME</label>
-                <input 
-                  type="text"
-                  placeholder="e.g., Coding Standards"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full text-sm p-2 rounded border bg-[var(--bg)]"
-                  style={{ borderColor: 'var(--border)' }}
-                />
-              </div>
-              <div className="w-full text-left">
-                <label className="block label-mono text-[10px] text-[var(--text-muted)] mb-1">TARGET URL</label>
-                <input 
-                  type="text"
-                  placeholder="drive.google.com/..."
-                  value={newUrl}
-                  onChange={(e) => setNewUrl(e.target.value)}
-                  className="w-full text-sm p-2 rounded border bg-[var(--bg)]"
-                  style={{ borderColor: 'var(--border)' }}
-                />
-              </div>
-              <button 
-                type="submit"
-                className="w-full sm:w-auto px-4 py-2 bg-[var(--accent)] text-white rounded text-sm font-semibold flex items-center justify-center gap-1 shrink-0 h-[38px]"
-              >
-                <Plus size={16} /> Add
-              </button>
-            </form>
-          )}
         </ScrollReveal>
       </section>
 
@@ -247,7 +133,7 @@ export default function Home() {
                   <h3 className="font-bold text-xl mb-2 line-clamp-2">{post.title}</h3>
                   <p className="text-[var(--text-muted)] text-sm line-clamp-3 mb-4">{post.summary || post.body}</p>
                 </div>
-                <Link to={`/news/${post.id}`} className="text-sm font-semibold flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
+                <Link to="/news" className="text-sm font-semibold flex items-center gap-1 hover:underline" style={{ color: 'var(--accent)' }}>
                   Read story <ArrowRight size={14} />
                 </Link>
               </div>
