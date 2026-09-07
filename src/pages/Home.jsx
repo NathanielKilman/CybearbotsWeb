@@ -19,6 +19,8 @@ const QUICK_LINKS = [
 export default function Home() {
   const { content, setValue } = useSiteContent()
   const { images, setImage } = useSiteImages()
+
+const { isUnlocked } = useTeamAuth()
   
   const { data: newsData } = useTable('news_posts', { order: 'post_date', ascending: false })
   const news = Array.isArray(newsData) ? newsData : []
