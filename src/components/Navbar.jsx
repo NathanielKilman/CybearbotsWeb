@@ -32,9 +32,11 @@ export default function Navbar({ robotGalleryVisible = true }) {
     <header className="sticky top-0 z-50 w-full bg-[var(--nav-bg)] border-b" style={{ borderColor: 'var(--border)' }}>
       <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
         
-        {/* LOGO */}
+        {/* LOGO — switches between dark and light mode versions */}
         <Link to="/" className="flex items-center gap-3 shrink-0">
-          {images?.nav_logo ? (
+          {theme === 'light' && images?.nav_logo_light ? (
+            <img src={images.nav_logo_light} alt="Logo" className="h-8 w-auto" />
+          ) : images?.nav_logo ? (
             <img src={images.nav_logo} alt="Logo" className="h-8 w-auto" />
           ) : (
             <span className="font-display font-black tracking-tight text-lg text-[var(--text)]">CYBEARBOTS</span>
