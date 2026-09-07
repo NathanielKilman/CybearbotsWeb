@@ -1,30 +1,26 @@
 import { useState } from 'react'
-import { Check, ExternalLink, Plus, Trash2, X, Send, Image as ImageIcon } from 'lucide-react'
+import { Check, ExternalLink, Plus, Trash2, X, Send, Image as ImageIcon, Maximize2 } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionLabel from '../components/SectionLabel'
 import ImageUpload from '../components/ImageUpload'
-import ScrollReveal from '../components/ScrollReveal' // Added import
+import ScrollReveal from '../components/ScrollReveal'
 import { useTable, useSiteContent } from '../lib/data'
 import { useTeamAuth } from '../context/TeamAuthContext'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
 // CONFIGURABLE LINKS PREFERENCE
-// Change this to 'http://' or another protocol if needed
 // ==========================================
 const DEFAULT_URL_PROTOCOL = 'https://'
 
-// Helper function to safely parse and prepare external sponsor links
 const formatExternalUrl = (url) => {
   if (!url) return '#'
   const trimmed = url.trim()
   
-  // If it already explicitly begins with http:// or https://, return it untouched
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed
   }
   
-  // Otherwise, use our configurable prefix variable
   return `${DEFAULT_URL_PROTOCOL}${trimmed}`
 }
 
@@ -66,6 +62,69 @@ const TIERS = [
     ],
   },
 ]
+
+function SponsorDetailModal({ sponsor, onClose }) {
+  if (!sponsor) return null
+  const targetLink = formatExternalUrl(sponsor.website_url)
+  const tier = TIERS.find((t) => t.key === sponsor.tier)
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
+      <div className="card w-full max-w-lg p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto" style={{ background: 'var(--bg-elevated)' }}>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1.5 rounded-full text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+        >
+          <X size={20} />
+        </button>
+
+        <div className="flex flex-col items-center text-center space-y-4">
+          {sponsor.logo_url ? (
+            <img
+              src={sponsor.logo_url}
+              alt={sponsor.name}
+              className="max-h-24 max-w-[80%] object-contain filter dark:brightness-95 my-2"
+            />
+          ) : (
+            <div className="w-20 h-20 rounded-full bg-[var(--bg)] flex items-center justify-center my-2">
+              <ImageIcon className="text-[var(--text-faint)]" size={32} />
+            </div>
+          )}
+
+          <div>
+            {tier && (
+              <span
+                className="text-xs label-mono px-3 py-1 rounded-full border inline-block mb-2 font-semibold"
+                style={{ color: tier.color, borderColor: tier.color }}
+              >
+                {tier.name} Sponsor
+              </span>
+            )}
+            <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-[var(--text)]">{sponsor.name}</h3>
+          </div>
+
+          <div className="w-full border-t my-2" style={{ borderColor: 'var(--border)' }} />
+
+          <p className="text-sm text-[var(--text-muted)] leading-relaxed text-left w-full whitespace-pre-wrap">
+            {sponsor.description || 'No detailed description provided.'}
+          </p>
+
+          {sponsor.website_url && (
+            <a
+              href={targetLink}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-3 rounded-lg font-semibold text-white mt-4 flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
+              style={{ background: 'var(--accent-strong)' }}
+            >
+              Visit Website <ExternalLink size={16} />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function AddSponsorModal({ onClose, onSaved }) {
   const [form, setForm] = useState({ name: '', tier: 'bronze', website_url: '', logo_url: '', description: '' })
@@ -116,14 +175,14 @@ function AddSponsorModal({ onClose, onSaved }) {
             </select>
           </div>
           <div>
-            <label className="label-mono block mb-1 text-xs">Short Description / Subtitle</label>
-            <input
-              type="text"
-              className="w-full bg-transparent border rounded-lg p-2 outline-none"
+            <label className="label-mono block mb-1 text-xs">Description / Overview</label>
+            <textarea
+              rows={3}
+              className="w-full bg-transparent border rounded-lg p-2 outline-none text-sm"
               style={{ borderColor: 'var(--border)' }}
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-              placeholder="e.g. Precision Manufacturing Specialists"
+              placeholder="Full description of the company and what they do for the team..."
             />
           </div>
           <div>
@@ -161,20 +220,34 @@ function AddSponsorModal({ onClose, onSaved }) {
   )
 }
 
-function SponsorCard({ sponsor, isUnlocked, onDelete }) {
+function SponsorCard({ sponsor, isUnlocked, onDelete, onExpand }) {
   const targetLink = formatExternalUrl(sponsor.website_url)
 
   return (
     <div className="card p-6 flex flex-col items-center justify-between text-center relative group min-h-[170px]">
+      {/* Admin Delete Button */}
       {isUnlocked && (
         <button
-          onClick={() => onDelete(sponsor.id)}
-          className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-all z-10 shadow"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete(sponsor.id)
+          }}
+          className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-all z-20 shadow"
           style={{ borderColor: '#ed1c24' }}
         >
           <Trash2 size={12} style={{ color: '#ed1c24' }} />
         </button>
       )}
+
+      {/* Hover Expand Button */}
+      <button
+        onClick={() => onExpand(sponsor)}
+        className="absolute top-2 left-2 p-1.5 rounded-lg border bg-[var(--bg-elevated)] opacity-0 group-hover:opacity-100 transition-all z-20 shadow flex items-center gap-1.5 text-xs label-mono text-[var(--text-muted)] hover:text-[var(--text)]"
+        style={{ borderColor: 'var(--border)' }}
+        title="View Full Details"
+      >
+        <Maximize2 size={13} />
+      </button>
 
       <a
         href={targetLink}
@@ -212,6 +285,7 @@ export default function Sponsors() {
   const { content } = useSiteContent()
   const { data: sponsorsData, refetch } = useTable('sponsors')
   const [showAdd, setShowAdd] = useState(false)
+  const [selectedSponsor, setSelectedSponsor] = useState(null)
   const [formStatus, setFormStatus] = useState('idle')
   const [inquiry, setInquiry] = useState({ name: '', company: '', email: '', message: '' })
 
@@ -286,7 +360,13 @@ export default function Sponsors() {
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     {matching.map((s) => (
-                      <SponsorCard key={s.id} sponsor={s} isUnlocked={isUnlocked} onDelete={handleDelete} />
+                      <SponsorCard
+                        key={s.id}
+                        sponsor={s}
+                        isUnlocked={isUnlocked}
+                        onDelete={handleDelete}
+                        onExpand={setSelectedSponsor}
+                      />
                     ))}
                   </div>
                 )}
@@ -345,8 +425,8 @@ export default function Sponsors() {
               <p className="text-[var(--text-muted)] text-sm mb-4 leading-relaxed">Donations can be processed through FIRST directly mapped to our account identity:</p>
               <div className="rounded-xl p-4 font-mono text-xs mb-4 bg-[var(--bg-elevated)] border" style={{ borderColor: 'var(--border)' }}>
                 Credit Card: Fill out the online form<br />
-  • Standard Check: Payable to FIRST, PO Box 845446 Boston, MA 02284-5446<br />
-  • Overnight Check: Payable to F.I.R.S.T - 845446, Attn: Lockbox Processing, 10 Dan Road, Canton, MA 02021
+                • Standard Check: Payable to FIRST, PO Box 845446 Boston, MA 02284-5446<br />
+                • Overnight Check: Payable to F.I.R.S.T - 845446, Attn: Lockbox Processing, 10 Dan Road, Canton, MA 02021
               </div>
               <a
                 href={paymentFormUrl || 'https://forms.office.com/pages/responsepage.aspx?id=v8Pzh9Ft7ES9j5nk5iLvhOw1q45GiRBOij4A7R_n2ClUNFNTNEdGT0hOU1c0QUdKOTdNNk5BVU1ZQiQlQCN0PWcu'}
@@ -447,7 +527,9 @@ export default function Sponsors() {
         </ScrollReveal>
       </section>
 
+      {/* MODALS */}
       {showAdd && <AddSponsorModal onClose={() => setShowAdd(false)} onSaved={refetch} />}
+      {selectedSponsor && <SponsorDetailModal sponsor={selectedSponsor} onClose={() => setSelectedSponsor(null)} />}
     </div>
   )
 }
