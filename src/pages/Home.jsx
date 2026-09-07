@@ -44,10 +44,10 @@ const { isUnlocked } = useTeamAuth()
         <div className="max-w-7xl mx-auto px-4 lg:px-6 pt-12 pb-16 lg:pt-20 lg:pb-28">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8 mb-8">
             <div className="fade-up flex items-end gap-4">
-            {/* Main/hero logos — always shown (upload only visible when unlocked via ImageUpload gating) */}
+{/* Main/hero logos */}
 <div className="flex gap-4">
-  {/* Dark Mode Logo */}
-  <div className={isUnlocked ? 'block' : 'hidden dark:block'}>
+  {/* Dark Mode Logo Container */}
+  <div className="[html[data-theme=light]_&]:hidden">
     {isUnlocked && <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">HERO (DARK)</p>}
     <ImageUpload
       src={images.team_logo}
@@ -59,8 +59,8 @@ const { isUnlocked } = useTeamAuth()
     />
   </div>
 
-  {/* Light Mode Logo */}
-  <div className={isUnlocked ? 'block' : 'block dark:hidden'}>
+  {/* Light Mode Logo Container */}
+  <div className="hidden [html[data-theme=light]_&]:block">
     {isUnlocked && <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">HERO (LIGHT)</p>}
     <ImageUpload
       src={images.team_logo_light} 
@@ -71,8 +71,7 @@ const { isUnlocked } = useTeamAuth()
       className="w-24 shadow-md rounded-xl"
     />
   </div>
-</div>
-              {/* Nav logos — only shown to team members */}
+</div>              {/* Nav logos — only shown to team members */}
               {isUnlocked && (
                 <>
                   <div>
