@@ -41,15 +41,43 @@ export default function Home() {
       <section className="relative overflow-hidden border-b hex-pattern" style={{ borderColor: 'var(--border)' }}>
         <div className="max-w-7xl mx-auto px-4 lg:px-6 pt-12 pb-16 lg:pt-20 lg:pb-28">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8 mb-8">
-            <div className="fade-up">
-              <ImageUpload
-                src={images.team_logo}
-                onUpload={(url) => setImage('team_logo', url)}
-                label="TEAM LOGO"
-                folder="branding"
-                aspect="aspect-square"
-                className="w-24 shadow-md rounded-xl"
-              />
+            <div className="fade-up flex items-end gap-4">
+              {/* Main/hero logo */}
+              <div>
+                <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">HERO LOGO</p>
+                <ImageUpload
+                  src={images.team_logo}
+                  onUpload={(url) => setImage('team_logo', url)}
+                  label="TEAM LOGO"
+                  folder="branding"
+                  aspect="aspect-square"
+                  className="w-24 shadow-md rounded-xl"
+                />
+              </div>
+              {/* Nav logo — dark mode */}
+              <div>
+                <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">NAV (DARK)</p>
+                <ImageUpload
+                  src={images.nav_logo}
+                  onUpload={(url) => setImage('nav_logo', url)}
+                  label="NAV DARK"
+                  folder="branding"
+                  aspect="aspect-square"
+                  className="w-16 shadow-md rounded-xl"
+                />
+              </div>
+              {/* Nav logo — light mode */}
+              <div>
+                <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">NAV (LIGHT)</p>
+                <ImageUpload
+                  src={images.nav_logo_light}
+                  onUpload={(url) => setImage('nav_logo_light', url)}
+                  label="NAV LIGHT"
+                  folder="branding"
+                  aspect="aspect-square"
+                  className="w-16 shadow-md rounded-xl"
+                />
+              </div>
             </div>
             <div className="text-left sm:text-right label-mono text-xs leading-relaxed text-[var(--text-muted)]">
               <p className="font-bold text-[var(--text)]">FIRST FRC</p>
