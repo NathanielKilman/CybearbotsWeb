@@ -44,18 +44,34 @@ const { isUnlocked } = useTeamAuth()
         <div className="max-w-7xl mx-auto px-4 lg:px-6 pt-12 pb-16 lg:pt-20 lg:pb-28">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8 mb-8">
             <div className="fade-up flex items-end gap-4">
-              {/* Main/hero logo — always shown (upload only visible when unlocked via ImageUpload gating) */}
-              <div>
-                {isUnlocked && <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">HERO LOGO</p>}
-                <ImageUpload
-                  src={images.team_logo}
-                  onUpload={(url) => setImage('team_logo', url)}
-                  label="TEAM LOGO"
-                  folder="branding"
-                  aspect="aspect-square"
-                  className="w-24 shadow-md rounded-xl"
-                />
-              </div>
+            {/* Main/hero logos — always shown (upload only visible when unlocked via ImageUpload gating) */}
+<div className="flex gap-4">
+  {/* Dark Mode Logo */}
+  <div className={isUnlocked ? 'block' : 'hidden dark:block'}>
+    {isUnlocked && <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">HERO (DARK)</p>}
+    <ImageUpload
+      src={images.team_logo}
+      onUpload={(url) => setImage('team_logo', url)}
+      label="HERO DARK"
+      folder="branding"
+      aspect="aspect-square"
+      className="w-24 shadow-md rounded-xl"
+    />
+  </div>
+
+  {/* Light Mode Logo */}
+  <div className={isUnlocked ? 'block' : 'block dark:hidden'}>
+    {isUnlocked && <p className="label-mono text-[10px] mb-1 text-[var(--text-faint)]">HERO (LIGHT)</p>}
+    <ImageUpload
+      src={images.team_logo_light} 
+      onUpload={(url) => setImage('team_logo_light', url)}
+      label="HERO LIGHT"
+      folder="branding"
+      aspect="aspect-square"
+      className="w-24 shadow-md rounded-xl"
+    />
+  </div>
+</div>
               {/* Nav logos — only shown to team members */}
               {isUnlocked && (
                 <>
