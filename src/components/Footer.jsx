@@ -36,7 +36,6 @@ export default function Footer() {
           <Link to="/" className="flex items-center gap-3 mb-4">
             <span
               className="w-9 h-9 rounded-lg flex items-center justify-center overflow-hidden"
-              style={{ background: 'var(--accent)' }}
             >
               {images.team_logo ? (
                 <img src={images.team_logo} alt="CyBearBots logo" className="w-full h-full object-cover" />
